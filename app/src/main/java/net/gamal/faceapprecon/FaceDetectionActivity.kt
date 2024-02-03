@@ -26,8 +26,8 @@ import java.nio.ByteOrder
 import java.util.concurrent.Executors
 
 class FaceDetectionActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityFaceDetectionBinding
-    private lateinit var cameraSelector: CameraSelector
+    private var binding: ActivityFaceDetectionBinding? =null
+    private var cameraSelector: CameraSelector?=null
     private val cameraXViewModel by viewModels<CameraXViewModel>()
     private lateinit var processCameraProvider: ProcessCameraProvider
     private lateinit var cameraPreview: Preview
@@ -37,7 +37,7 @@ class FaceDetectionActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityFaceDetectionBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        setContentView(binding?.root)
         interpreter = Interpreter(TFLiteModelLoader.loadModelFile(assets, "model_unquant.tflite"))
         val inputSize = interpreter.getInputTensor(0).shape()[1]
         inputBuffer = ByteBuffer.allocateDirect(4 * inputSize * inputSize * 3)
@@ -53,7 +53,7 @@ class FaceDetectionActivity : AppCompatActivity() {
     private fun bindInputAnalyser() {
         imageAnalysis = ImageAnalysis.Builder()
             .setTargetAspectRatio(AspectRatio.RATIO_4_3)
-            .setTargetRotation(binding.cameraPreview.display.rotation)
+            .setTargetRotation(binding!!.cameraPreview.display.rotation)
             .setBackpressureStrategy(ImageAnalysis.STRATEGY_BLOCK_PRODUCER)
             .setOutputImageFormat(ImageAnalysis.OUTPUT_IMAGE_FORMAT_RGBA_8888)
             .build()
@@ -62,7 +62,7 @@ class FaceDetectionActivity : AppCompatActivity() {
         try {
             processCameraProvider.bindToLifecycle(
                 this,
-                cameraSelector,
+                cameraSelector!!,
                 cameraPreview,
                 imageAnalysis
             )
@@ -81,17 +81,18 @@ class FaceDetectionActivity : AppCompatActivity() {
             bitmapBuffer.convertBitmapToByteBuffer(inputBuffer)
             runInference(bitmapBuffer,interpreter, inputBuffer)
             TFLiteModelExecutor.executeTensorModel(lifecycleScope, this, inputBuffer)
+
             imageProxy.close()
         }
     }
 
     private fun bindCameraPreview() {
         cameraPreview = Preview.Builder()
-            .setTargetRotation(binding.cameraPreview.display.rotation)
+            .setTargetRotation(binding!!.cameraPreview.display.rotation)
             .build()
-        cameraPreview.setSurfaceProvider(binding.cameraPreview.surfaceProvider)
+        cameraPreview.setSurfaceProvider(binding!!.cameraPreview.surfaceProvider)
         try {
-            processCameraProvider.bindToLifecycle(this, cameraSelector, cameraPreview)
+            processCameraProvider.bindToLifecycle(this, cameraSelector!!, cameraPreview)
         } catch (illegalStateException: IllegalStateException) {
             Log.e(TAG, illegalStateException.message ?: "IllegalStateException")
         } catch (illegalArgumentException: IllegalArgumentException) {
@@ -117,6 +118,17 @@ class FaceDetectionActivity : AppCompatActivity() {
             rect?.let { canvas.drawRect(it, paint) }
         }
     }
+
+    override fun onPause() {
+        super.onPause()
+        imageAnalysis.clearAnalyzer()
+        binding=null
+        cameraSelector=null
+        inputBuffer.clear()
+        interpreter.close()
+
+    }
+
     companion object {
         private val TAG = FaceDetectionActivity::class.simpleName.plus("SBS")
     }

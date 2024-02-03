@@ -36,17 +36,23 @@ internal object BitmapUtils {
 
     // Run inference on the bitmap using the provided interpreter and input buffer
     fun runInference(bitmap: Bitmap, interpreter: Interpreter, inputBuffer: ByteBuffer) {
-        val inputShape = interpreter.getInputTensor(0).shape()
-        val inputSize = inputShape[1]
-        val expectedBufferSize = interpreter.getInputTensor(0).numBytes()
-        val resizedBitmap = bitmap.resizeBitmap(inputSize, inputSize)
+        try {
+            val inputShape = interpreter.getInputTensor(0).shape()
+            val inputSize = inputShape[1]
+            val expectedBufferSize = interpreter.getInputTensor(0).numBytes()
+            val resizedBitmap = bitmap.resizeBitmap(inputSize, inputSize)
 
-        if (resizedBitmap.byteCount > expectedBufferSize) {
-            Log.e(TAG, "Resized bitmap byte count exceeds expected buffer size")
+            if (resizedBitmap.byteCount > expectedBufferSize) {
+                Log.e(TAG, "Resized bitmap byte count exceeds expected buffer size")
+                return
+            }
+
+            resizedBitmap.convertBitmapToByteBuffer(inputBuffer)
+        } catch (e: Exception) {
+            Log.e(TAG, "${e.message}")
             return
         }
 
-        resizedBitmap.convertBitmapToByteBuffer(inputBuffer)
     }
 
     private const val TAG = "BitmapUtils"

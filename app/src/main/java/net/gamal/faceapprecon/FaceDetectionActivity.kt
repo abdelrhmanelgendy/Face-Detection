@@ -38,7 +38,7 @@ class FaceDetectionActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityFaceDetectionBinding.inflate(layoutInflater)
         setContentView(binding?.root)
-        interpreter = Interpreter(TFLiteModelLoader.loadModelFile(assets, "model_unquant.tflite"))
+        interpreter = Interpreter(TFLiteModelLoader.loadModelFile(assets, "face_recognition_mobilenetv2.tflite"))
         val inputSize = interpreter.getInputTensor(0).shape()[1]
         inputBuffer = ByteBuffer.allocateDirect(4 * inputSize * inputSize * 3)
         inputBuffer.order(ByteOrder.nativeOrder())
@@ -51,13 +51,7 @@ class FaceDetectionActivity : AppCompatActivity() {
     }
 
     private fun bindInputAnalyser() {
-        imageAnalysis = ImageAnalysis.Builder()
-            .setTargetAspectRatio(AspectRatio.RATIO_4_3)
-            .setTargetRotation(binding!!.cameraPreview.display.rotation)
-            .setBackpressureStrategy(ImageAnalysis.STRATEGY_BLOCK_PRODUCER)
-            .setOutputImageFormat(ImageAnalysis.OUTPUT_IMAGE_FORMAT_RGBA_8888)
-            .build()
-
+        setupImageAnalysis()
         startAnalysis()
         try {
             processCameraProvider.bindToLifecycle(
@@ -71,6 +65,15 @@ class FaceDetectionActivity : AppCompatActivity() {
         } catch (illegalArgumentException: IllegalArgumentException) {
             Log.e(TAG, illegalArgumentException.message ?: "IllegalArgumentException")
         }
+    }
+
+    private fun setupImageAnalysis() {
+        imageAnalysis = ImageAnalysis.Builder()
+            .setTargetAspectRatio(AspectRatio.RATIO_4_3)
+            .setTargetRotation(binding!!.cameraPreview.display.rotation)
+            .setBackpressureStrategy(ImageAnalysis.STRATEGY_BLOCK_PRODUCER)
+            .setOutputImageFormat(ImageAnalysis.OUTPUT_IMAGE_FORMAT_RGBA_8888)
+            .build()
     }
 
     @OptIn(ExperimentalGetImage::class)

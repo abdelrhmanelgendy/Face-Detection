@@ -16,7 +16,7 @@ object TFLiteModelExecutor {
         inputBuffer: ByteBuffer,
     ) {
         lifecycleScope.launch {
-            val model = ModelUnquant.newInstance(context)
+            val model = FaceRecognitionMobilenetv2.newInstance(context)
             Log.e(MainActivity.TAG, "executeTensorModel: model=$model ")
 
             // Creates inputs for reference.

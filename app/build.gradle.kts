@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.cli.js.internal.main
-
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -68,4 +66,7 @@ dependencies {
     implementation("androidx.camera:camera-camera2:$cameraVersion")
     implementation("androidx.camera:camera-lifecycle:$cameraVersion")
     implementation("androidx.camera:camera-view:$cameraVersion")
+
+    implementation("com.google.mlkit:face-detection:16.1.5")
+    implementation ("com.google.android.gms:play-services-mlkit-face-detection:17.1.0")
 }

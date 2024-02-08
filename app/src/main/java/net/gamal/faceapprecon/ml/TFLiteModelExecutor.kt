@@ -1,68 +1,275 @@
 package net.gamal.faceapprecon.ml
 
-import android.content.Context
+import android.graphics.Bitmap
 import android.util.Log
-import kotlinx.coroutines.CoroutineScope
+import androidx.lifecycle.LifecycleCoroutineScope
 import kotlinx.coroutines.launch
 import net.gamal.faceapprecon.MainActivity
+import net.gamal.faceapprecon.facedetextion.presentation.FaceDetectionActivity
 import org.tensorflow.lite.DataType
+import org.tensorflow.lite.support.common.ops.NormalizeOp
+import org.tensorflow.lite.support.image.ImageProcessor
+import org.tensorflow.lite.support.image.TensorImage
+import org.tensorflow.lite.support.image.ops.ResizeOp
 import org.tensorflow.lite.support.tensorbuffer.TensorBuffer
-import java.nio.ByteBuffer
 
 object TFLiteModelExecutor {
+
+
     fun executeTensorModel(
-        lifecycleScope: CoroutineScope,
-        context: Context,
-        inputBuffer: ByteBuffer,
+        lifecycleScope: LifecycleCoroutineScope,
+        faceDetectionActivity: FaceDetectionActivity,
+        faceBitmap: Bitmap?
     ) {
+        val faceNetImageProcessor = ImageProcessor.Builder().add(
+            ResizeOp(
+                112, 112, ResizeOp.ResizeMethod.BILINEAR
+            )
+        ).add(NormalizeOp(0f, 255f)).build()
+        val tensorImage = TensorImage.fromBitmap(faceBitmap)
+
+        val faceNetByteBuffer = faceNetImageProcessor.process(tensorImage).buffer
+
+
+        val inputFeature0 =
+            TensorBuffer.createFixedSize(intArrayOf(1, 112, 112, 3), DataType.FLOAT32)
+        inputFeature0.loadBuffer(faceNetByteBuffer)
+
+
         lifecycleScope.launch {
-            val model = FaceRecognitionMobilenetv2.newInstance(context)
-            Log.e(MainActivity.TAG, "executeTensorModel: model=$model ")
 
-            // Creates inputs for reference.
-            val inputFeature0 =
-                TensorBuffer.createFixedSize(intArrayOf(1, 224, 224, 3), DataType.FLOAT32)
-            Log.e(MainActivity.TAG, "executeTensorModel: inputFeature0=$inputFeature0 ")
-            inputFeature0.loadBuffer(inputBuffer)
-
-            // Runs model inference and gets the result.
+            val model = MobileFaceNet.newInstance(faceDetectionActivity)
             val outputs = model.process(inputFeature0)
             val outputFeature0 = outputs.outputFeature0AsTensorBuffer
+
             Log.e(MainActivity.TAG, "executeTensorModel: outputs=${outputs} ")
             Log.e(MainActivity.TAG, "executeTensorModel: outputFeature0=${outputFeature0.buffer} ")
 
-
-            // Interpret the model output (for example, assuming it's classification probabilities)
             val probabilities = outputFeature0.floatArray
-            Log.e(MainActivity.TAG, "executeTensorModel: probabilities=${probabilities} ")
-
-            // Find the index of the maximum probability (assuming it's a classification task)
-            var maxProbabilityIndex = 0
-            var maxProbability = probabilities[0]
-
-            for (i in 1 until probabilities.size) {
-                if (probabilities[i] > maxProbability) {
-                    maxProbability = probabilities[i]
-                    maxProbabilityIndex = i
-                }
-            }
-
-            // Print the result
-            println("Predicted class index: $maxProbabilityIndex")
-            println("Probability: ${probabilities[maxProbabilityIndex]}")
             Log.e(
                 MainActivity.TAG,
-                "executeTensorModel: Predicted class index: maxProbabilityIndex=$maxProbabilityIndex "
-            )
-            Log.e(
-                MainActivity.TAG,
-                "executeTensorModel: Probability=${probabilities[maxProbabilityIndex]} "
+                "executeTensorModel: probabilities=${probabilities.contentToString()} "
             )
 
+            val x3:DoubleArray=probabilities.map {
+                it.toDouble()
+            }.toDoubleArray()
+            Log.e(
+                MainActivity.TAG,
+                "executeTensorModel: Distance=${euclideanDistance(x1,x3)} "
+            )
 
             // Releases model resources if no longer used.
 //            model.close()
         }
     }
+
+    fun euclideanDistance(embedding1: DoubleArray, embedding2: DoubleArray): Double {
+        require(embedding1.size == embedding2.size) { "Embeddings must have the same dimensionality" }
+
+        var sum = 0.0
+        for (i in embedding1.indices) {
+            sum += Math.pow(embedding1[i] - embedding2[i], 2.0)
+        }
+        return Math.sqrt(sum)
+    }
+
+    val x1:DoubleArray = doubleArrayOf(
+        -0.009653989,
+        0.013591457,
+        8.3232E-4,
+        0.0066747903,
+        -0.023485586,
+        0.10871566,
+        -0.04624291,
+        0.062366307,
+        0.036170784,
+        0.19630192,
+        9.822595E-4,
+        0.009313903,
+        4.0380964E-5,
+        -0.01038772,
+        -0.003037334,
+        0.0018793553,
+        -0.0154181365,
+        -0.0049693333,
+        0.0048044357,
+        0.010952248,
+        0.1253516,
+        0.020119146,
+        0.14209397,
+        0.009442959,
+        0.096619435,
+        0.012096391,
+        -0.016041474,
+        0.067431785,
+        0.06991369,
+        5.9918565E-4,
+        -9.171027E-4,
+        0.22350638,
+        -0.03809722,
+        -0.004870264,
+        -0.097066276,
+        -0.22077483,
+        0.28866187,
+        0.014170941,
+        -0.001612955,
+        -0.024882782,
+        -0.0032549954,
+        0.0017060024,
+        0.013111096,
+        -1.482534E-4,
+        0.002070836,
+        -0.024615336,
+        -0.11394314,
+        -0.120232575,
+        7.588874E-4,
+        0.051918805,
+        0.090748556,
+        -0.0073454436,
+        -0.15303521,
+        -0.0012722694,
+        -0.17031336,
+        0.014308054,
+        -0.010907255,
+        0.0020003063,
+        -0.031372957,
+        0.005451049,
+        0.09005595,
+        -0.020285493,
+        -0.10711076,
+        0.25618973,
+        -0.013203187,
+        0.011536242,
+        -0.00664472,
+        -0.016089961,
+        0.016240101,
+        0.002301904,
+        -0.015332909,
+        -0.08203267,
+        -0.22198361,
+        -0.010882164,
+        -0.1208477,
+        -0.0032409537,
+        0.0011190139,
+        0.0011362832,
+        0.007950586,
+        0.031380765,
+        -0.008565701,
+        -0.052790705,
+        0.0025772522,
+        0.0069005312,
+        -0.024175238,
+        -0.0039227647,
+        0.0027236138,
+        0.08143605,
+        0.055882145,
+        0.17522968,
+        -0.14498818,
+        -0.0046246466,
+        -8.541081E-4,
+        -0.013353698,
+        0.027301544,
+        -0.007487721,
+        0.043613747,
+        -0.052041497,
+        -0.0037521967,
+        -0.0010346215,
+        0.0041662883,
+        -0.0016552407,
+        0.0048123114,
+        -0.0012379056,
+        0.0066111702,
+        0.007044543,
+        -0.056853402,
+        0.0020314325,
+        1.033478E-4,
+        0.011494158,
+        -0.01621523,
+        0.0023304222,
+        0.008260688,
+        0.33188286,
+        0.013828674,
+        -0.0753344,
+        -0.0057201874,
+        0.02351174,
+        -0.025764713,
+        -0.0050239526,
+        0.20195916,
+        -0.01671688,
+        -0.17504895,
+        1.5391625E-4,
+        0.0027067077,
+        -0.003271003,
+        0.0042851577,
+        0.010095463,
+        -0.009025519,
+        -0.034114365,
+        0.0020113736,
+        0.019475672,
+        -0.0034089168,
+        0.0073598484,
+        0.020400058,
+        -0.007905485,
+        -0.09460322,
+        -0.035739977,
+        0.008000198,
+        -0.005325313,
+        0.0047348463,
+        -0.005936208,
+        -0.0038699752,
+        -0.17524639,
+        0.02043278,
+        0.059540015,
+        -0.010839752,
+        -0.004639489,
+        0.011435843,
+        -2.9057986E-4,
+        -0.008902777,
+        -0.15607536,
+        -0.2047963,
+        -0.009034101,
+        -0.007832922,
+        -0.011107849,
+        0.005617233,
+        -0.004790507,
+        0.109132946,
+        -0.0016900388,
+        -0.023899233,
+        0.0070904014,
+        -0.0026926044,
+        5.641128E-5,
+        0.0018369363,
+        0.01386964,
+        -0.004273633,
+        0.06064547,
+        -4.0064045E-4,
+        -2.2288418E-4,
+        0.11271509,
+        -0.029476382,
+        -0.0026266163,
+        -0.0066614556,
+        0.0181405,
+        0.0034371922,
+        0.015744947,
+        -0.028791288,
+        -0.008212781,
+        0.0028950232,
+        0.0774306,
+        -0.01739675,
+        -5.689714E-4,
+        0.0016251449,
+        -0.10079783,
+        -0.031979647,
+        -0.015608784,
+        0.029424503,
+        -0.04966164,
+        -0.094798096,
+        -0.021665024,
+        0.0099325385
+    )
+    val x2 = doubleArrayOf(
+        -0.0117173, 0.02585477, 0.02048199, -0.003750868, -0.07043577, 0.09264915, -0.050269034, -0.095838636, -0.047895167, -0.04257036, -0.020705514, 0.005981814, -0.0073695118, 0.045184575, -0.0023330762, 0.03011987, -0.032655343, -0.01402145, 1.7677053E-4, 0.0035592956, -0.050848365, 0.10056207, -0.016528582, 0.015541637, -0.0048311916, 0.024889173, -0.04667776, 0.1024434, 0.19583145, -0.03266742, -0.0063453643, 0.2386844, 0.17947268, 7.351504E-5, -0.018489376, 0.22476354, 0.060213577, -0.01974939, 0.0052344366, -0.0749141, 0.009584326, 0.0055205403, 0.015138931, -0.017128037, 0.008243501, -0.044991843, 0.03951909, -0.116001874, -0.017663268, 0.07717593, -0.03499943, -0.00688197, -0.22925925, -0.0045863623, -0.031332765, 0.0066087856, 0.06683059, 0.003687064, -0.13792989, 0.034570634, 0.06913063, -0.15494017, -0.0349647, -0.121459424, -0.010277742, -0.0599792, -0.010498957, -0.0032207905, 0.0037496823, 0.0023202517, -0.034183208, 0.052617513, 0.056721255, 0.017498884, -0.011988881, 0.018489253, 7.8967796E-4, -0.002377598, 0.2677159, 0.005157533, -0.011521976, 0.0064088623, -0.015665233, 0.12454468, -0.11333366, -0.0044709174, -0.007633166, -0.034784306, 0.06528431, -0.11428117, 0.08469781, -0.0015076941, 0.01386712, -0.029932158, 0.045736346, -0.1180218, 0.04017613, 0.06984854, 0.0029604414, 4.0958915E-4, 0.0030190975, -0.011445691, -0.0071748844, -0.004305727, 6.08543E-4, 0.007015879, -0.1527094, 0.0048481156, -0.0015689434, 0.021988487, 0.038671333, 0.010982428, 0.0042450945, 0.12963447, 0.011152517, 0.048645265, -0.0012957904, -0.054481532, 0.05411697, 0.277073, 0.109684266, -0.017905943, -0.094717406, -0.0033683754, 9.167831E-5, -0.001160315, 0.0054135667, -0.0019194036, -0.0029924363, -0.07627055, 0.011661867, 0.02719018, -0.0018548832, -0.022508893, 0.1082148, -0.019141652, -0.28479898, -0.0095057115, 0.0011612028, 0.020355282, -0.00685444, -0.0023717224, -0.0013118299, -0.074912004, -0.12711197, 0.093850024, -0.030049732, -0.003635984, 0.0075293733, -0.012977072, -0.0035126717, -0.08372395, 0.10077444, -0.029655812, -0.0047896933, 0.0013260205, -0.0030908699, 0.012970934, -0.0908248, -9.5332216E-4, -0.07526282, -0.0010673783, -0.012492374, 8.05215E-5, 0.00770316, 0.026056953, 0.015939262, 0.1360755, -0.0011177863, 0.0028287182, 0.03492854, 0.14293586, -0.0016099508, -0.039529137, 0.023046598, 0.003961435, -0.017774029, -0.106361, -0.0126883555, 0.008165605, -0.10772429, 0.006078469, -0.001124324, -0.0034463038, 0.061450195, 0.059286226, -0.037029944, 0.08717099, 0.101813, -0.15996821, -0.076559015, -0.0015703945)
+
 
 }

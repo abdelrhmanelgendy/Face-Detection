@@ -12,7 +12,8 @@
         android:id="@+id/iv_work"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:layout_margin="5dp"
+        android:padding="5dp"
+        android:background="#B3000000"
         android:src="@drawable/work" />
 
     <LinearLayout

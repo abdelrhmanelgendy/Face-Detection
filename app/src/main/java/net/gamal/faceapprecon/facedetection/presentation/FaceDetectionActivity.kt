@@ -85,9 +85,10 @@ class FaceDetectionActivity : AppCompatActivity() {
         )
         binding.graphicOverlay.add(faceBox)
         cropToBBox?.let {
-            TFLiteModelExecutor.executeTensorModel(lifecycleScope, this, it)
-        }
+            TFLiteModelExecutor.executeTensorModel(lifecycleScope, this, it){
 
+            }
+        }
     }
 
     private fun onFailure(exception: Exception) {

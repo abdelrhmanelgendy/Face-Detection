@@ -1,5 +1,6 @@
 package net.gamal.faceapprecon.facedetection.presentation
 
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
@@ -12,6 +13,8 @@ import androidx.lifecycle.lifecycleScope
 import com.google.mlkit.vision.face.Face
 import net.gamal.faceapprecon.databinding.ActivityFaceDetectionBinding
 import net.gamal.faceapprecon.facedetection.data.model.FaceBox
+import net.gamal.faceapprecon.facedetection.presentation.dialogs.SaveFaceDialog
+import net.gamal.faceapprecon.facedetection.presentation.dialogs.ShowFaceDialog
 import net.gamal.faceapprecon.ml.TFLiteModelExecutor
 import net.gamal.faceapprecon.utils.ImageDetectorUtil
 import net.gamal.faceapprecon.utils.MediaUtils.flip
@@ -19,6 +22,7 @@ import net.gamal.faceapprecon.utils.MediaUtils.flip
 
 class FaceDetectionActivity : AppCompatActivity() {
 
+    private var currentBox: Bitmap? = null
     private lateinit var binding: ActivityFaceDetectionBinding
     private val cameraXViewModel by viewModels<CameraXViewModel>()
 
@@ -28,7 +32,7 @@ class FaceDetectionActivity : AppCompatActivity() {
         binding = ActivityFaceDetectionBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupCamera()
-        setupSwitchCameraButton()
+        setupButtons()
     }
 
     @ExperimentalGetImage
@@ -43,13 +47,26 @@ class FaceDetectionActivity : AppCompatActivity() {
             )
         }
     }
-
     @ExperimentalGetImage
-    private fun setupSwitchCameraButton() {
+    private fun setupButtons() {
+        val saveFaceDialog = SaveFaceDialog()
+        saveFaceDialog.setOnSaveFaceClicked { name, bitmap ->
+            bitmap?.let {
+                TFLiteModelExecutor.executeTensorModel(lifecycleScope, this, it) {
+                    cameraXViewModel.saveFace(name, it,bitmap)
+                }
+            }
+        }
         binding.switchCamera.setOnClickListener {
             cameraXViewModel.switchCamera(
                 binding.cameraPreview, this, ::onSuccess, ::onFailure
             )
+        }
+        binding.saveFaceButton.setOnClickListener {
+            currentBox?.let {
+                saveFaceDialog.setFaceBitmap(it)
+                saveFaceDialog.show(supportFragmentManager, "SaveFaceDialog")
+            }
         }
     }
 
@@ -84,10 +101,22 @@ class FaceDetectionActivity : AppCompatActivity() {
             }
         )
         binding.graphicOverlay.add(faceBox)
-        cropToBBox?.let {
-            TFLiteModelExecutor.executeTensorModel(lifecycleScope, this, it){
-
+        this.currentBox =
+            if (cameraXViewModel.getCurrentCamera() == CameraSelector.LENS_FACING_FRONT) {
+                cropToBBox?.flip(horizontal = true)?.getOrNull()
+            } else {
+                cropToBBox
             }
+        cropToBBox?.let { bitmap ->
+
+              TFLiteModelExecutor.executeTensorModel(lifecycleScope, this, bitmap) {
+                  cameraXViewModel.recognizeFace(it)?.let {encodedFace->
+                      binding.faceInfo.apply {
+                          txtName.text = encodedFace.first.name
+                          ivSavedImage.setImageBitmap(encodedFace.second)
+                      }
+              }
+          }
         }
     }
 

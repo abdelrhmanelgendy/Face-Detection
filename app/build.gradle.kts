@@ -67,6 +67,8 @@ dependencies {
     implementation("androidx.camera:camera-lifecycle:$cameraVersion")
     implementation("androidx.camera:camera-view:$cameraVersion")
 
+
+    implementation("com.google.code.gson:gson:2.10.1")
     implementation("com.google.mlkit:face-detection:16.1.5")
     implementation ("com.google.android.gms:play-services-mlkit-face-detection:17.1.0")
 }

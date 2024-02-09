@@ -10,7 +10,6 @@ class MainActivity : AppCompatActivity() {
 
     private val cameraPermission = android.Manifest.permission.CAMERA
     private lateinit var binding: ActivityMainBinding
-
     private val requestPermissionLauncher =
         registerForActivityResult(RequestPermission()) { isGranted ->
             if (isGranted) {
@@ -27,9 +26,6 @@ class MainActivity : AppCompatActivity() {
             requestCameraAndStart()
         }
     }
-
-
-
 
     private fun requestCameraAndStart() {
         if (isPermissionGranted(cameraPermission)) {
@@ -55,9 +51,5 @@ class MainActivity : AppCompatActivity() {
                 requestPermissionLauncher.launch(cameraPermission)
             }
         }
-    }
-
-    companion object {
-        const val TAG = "MainActivity"
     }
 }

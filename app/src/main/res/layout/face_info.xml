@@ -2,225 +2,241 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-
+    android:background="@color/black"
     android:gravity="center_vertical"
-    android:orientation="horizontal"
+    android:orientation="vertical"
 
     app:layout_constraintBottom_toBottomOf="parent">
 
-    <ImageView
-        android:id="@+id/iv_work"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:padding="5dp"
-        android:background="#B3000000"
-        android:src="@drawable/work" />
+    <TextView
+        android:id="@+id/txtName"
+        android:layout_width="match_parent"
+        android:textSize="24dp"
+        android:layout_height="wrap_content" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:alpha=".7"
-        android:paddingStart="5dp"
-        android:background="@color/black"
-        android:orientation="vertical">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:layout_weight="1"
-                android:text="Cosine Similarity"
-                />
-            <TextView
-                android:id="@+id/txt_similarity_value"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                                android:layout_weight="4"
+        android:layout_height="wrap_content"
 
-                android:textColor="#C07790"
-                />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:layout_weight="1"
-                android:text="Distance"
-                />
-            <TextView
-                android:id="@+id/txt_distance_value"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                                android:layout_weight="4"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
 
-                android:textColor="#C07790"
-                />
-        </LinearLayout>
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <ImageView
+            android:id="@+id/iv_work"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:background="#B3000000"
+            android:padding="5dp"
+            android:src="@drawable/work" />
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:layout_weight="1"
-                android:text="Probability"
-                />
-            <TextView
-                android:id="@+id/txt_real_probability_value"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                                android:layout_weight="4"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
 
-                android:textColor="#C07790"
-                />
+            android:orientation="vertical"
+            android:paddingStart="5dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Cosine Similarity"
+                    android:textColor="@color/white" />
+
+                <TextView
+                    android:id="@+id/txt_similarity_value"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4"
+
+                    android:textColor="#C07790" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Distance"
+                    android:textColor="@color/white" />
+
+                <TextView
+                    android:id="@+id/txt_distance_value"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4"
+
+                    android:textColor="#C07790" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Probability"
+                    android:textColor="@color/white" />
+
+                <TextView
+                    android:id="@+id/txt_real_probability_value"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4"
+
+                    android:textColor="#C07790" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Smiling Probability"
+                    android:textColor="@color/white" />
+
+                <TextView
+                    android:id="@+id/txt_smiling_value"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4"
+
+                    android:textColor="#C07790" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Left Eye Open Probability"
+                    android:textColor="@color/white" />
+
+                <TextView
+                    android:id="@+id/txt_left_eye_value"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4"
+
+                    android:textColor="#C07790" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Right Eye Open Probability"
+                    android:textColor="@color/white" />
+
+                <TextView
+                    android:id="@+id/txt_right_eye_value"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4"
+
+                    android:textColor="#C07790" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Head Rotation X"
+                    android:textColor="@color/white" />
+
+                <TextView
+                    android:id="@+id/txt_head_rotation_x_value"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4"
+
+                    android:textColor="#C07790" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Head Rotation Y"
+                    android:textColor="@color/white" />
+
+                <TextView
+                    android:id="@+id/txt_head_rotation_y_value"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4"
+
+                    android:textColor="#C07790" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Head Rotation Z"
+                    android:textColor="@color/white" />
+
+                <TextView
+                    android:id="@+id/txt_head_rotation_z_value"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4"
+
+                    android:textColor="#C07790" />
+            </LinearLayout>
+
+
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:layout_weight="1"
-                android:text="Smiling Probability"
-                />
-            <TextView
-                android:id="@+id/txt_smiling_value"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                                android:layout_weight="4"
 
-                android:textColor="#C07790"
-                />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:layout_weight="1"
-                android:text="Left Eye Open Probability"
-                />
-            <TextView
-                android:id="@+id/txt_left_eye_value"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                                android:layout_weight="4"
-
-                android:textColor="#C07790"
-                />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:layout_weight="1"
-                android:text="Right Eye Open Probability"
-                />
-            <TextView
-                android:id="@+id/txt_right_eye_value"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                                android:layout_weight="4"
-
-                android:textColor="#C07790"
-                />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:layout_weight="1"
-                android:text="Head Rotation X"
-                />
-            <TextView
-                android:id="@+id/txt_head_rotation_x_value"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                                android:layout_weight="4"
-
-                android:textColor="#C07790"
-                />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:layout_weight="1"
-                android:text="Head Rotation Y"
-                />
-            <TextView
-                android:id="@+id/txt_head_rotation_y_value"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                                android:layout_weight="4"
-
-                android:textColor="#C07790"
-                />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:layout_weight="1"
-                android:text="Head Rotation Z"
-                />
-            <TextView
-                android:id="@+id/txt_head_rotation_z_value"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                                android:layout_weight="4"
-
-                android:textColor="#C07790"
-                />
-        </LinearLayout>
-
-
-
+        <ImageView
+            android:id="@+id/iv_savedImage"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:background="#B3000000"
+            android:padding="5dp"
+            android:src="@drawable/work" />
     </LinearLayout>
 </LinearLayout>

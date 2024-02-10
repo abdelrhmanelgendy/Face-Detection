@@ -3,7 +3,8 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("com.chaquo.python")
     id("kotlin-kapt")
-    id("dagger.hilt.android.plugin")
+    kotlin("kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -74,16 +75,16 @@ dependencies {
     implementation("com.google.mlkit:face-detection:16.1.5")
     implementation ("com.google.android.gms:play-services-mlkit-face-detection:17.1.0")
 
-    implementation("androidx.room:room-runtime:2.6.1")
-    kapt("androidx.room:room-compiler:2.6.1")
 
-    // Optional - Kotlin Extensions and Coroutines support for Room
-    implementation("androidx.room:room-ktx:2.6.1")
+    val room_version = "2.6.1"
+    implementation("androidx.room:room-runtime:$room_version")
+    annotationProcessor("androidx.room:room-compiler:$room_version")
 
-    // Hilt
-    implementation("com.google.dagger:hilt-android:2.40")
-    kapt("com.google.dagger:hilt-compiler:2.40")
+    implementation("com.google.dagger:hilt-android:2.48")
+    kapt("com.google.dagger:hilt-android-compiler:2.48")
 
-    // For ViewModel support
-    implementation("androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03")
+}
+
+kapt {
+    correctErrorTypes = true
 }

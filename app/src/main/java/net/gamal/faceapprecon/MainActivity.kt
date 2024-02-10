@@ -7,6 +7,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import net.gamal.faceapprecon.databinding.ActivityMainBinding
 import net.gamal.faceapprecon.presentation.FaceDetectionActivity
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private val cameraPermission = android.Manifest.permission.CAMERA

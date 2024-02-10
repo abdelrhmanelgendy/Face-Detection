@@ -54,7 +54,7 @@ abstract class UseCaseLocal<Domain, in Body> : UseCase<Domain, Body>() {
         requestExecution: Flow<M>, onResult: suspend (Resource<Domain>) -> Unit
     ): Flow<M> = requestExecution.catch { e ->
         val failureResource = if (e is Exception) e
-        else Exception(message = "Unknown error in UseCaseLocal: $e")
+        else Exception("Unknown error in UseCaseLocal: $e")
 
         onResult.invoke(invokeFailureState(failureResource))
         onResult.invoke(Resource.loading(false))

@@ -6,7 +6,7 @@ import net.gamal.faceapprecon.detection.domain.models.EncodedFaceInformation
 import net.gamal.faceapprecon.detection.domain.repository.IEncodedFaceRepository
 import javax.inject.Inject
 
-class EncodedFaceRepository @Inject constructor(private val localDS: EncodedFaceLocalDS) :
+class EncodedFaceRepository  constructor(private val localDS: EncodedFaceLocalDS) :
     IEncodedFaceRepository {
     override suspend fun insertFace(face: EncodedFaceInformation) {
         EncodedFaceInformationMapper.domainToEntity(face).apply {

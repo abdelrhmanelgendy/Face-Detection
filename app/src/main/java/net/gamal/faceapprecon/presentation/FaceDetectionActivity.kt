@@ -12,10 +12,8 @@ import androidx.camera.core.ImageProxy
 import androidx.lifecycle.lifecycleScope
 import com.google.mlkit.vision.face.Face
 import dagger.hilt.android.AndroidEntryPoint
-import net.gamal.faceapprecon.databinding.ActivityFaceDetectionBinding
 import net.gamal.faceapprecon.camera.data.model.FaceBox
-import net.gamal.faceapprecon.presentation.dialogs.SaveFaceDialog
-import net.gamal.faceapprecon.presentation.dialogs.ShowFaceDialog
+import net.gamal.faceapprecon.databinding.ActivityFaceDetectionBinding
 import net.gamal.faceapprecon.ml.TFLiteModelExecutor
 import net.gamal.faceapprecon.utils.ImageDetectorUtil
 import net.gamal.faceapprecon.utils.MediaUtils.flip
@@ -39,13 +37,13 @@ class FaceDetectionActivity : AppCompatActivity() {
 
     @ExperimentalGetImage
     private fun setupCamera() {
-            cameraXViewModel.setupCamera(this)
-            cameraXViewModel.bindInputAnalyser(this, binding.cameraPreview, ::onGetImageProxy)
+        cameraXViewModel.setupCamera(this,binding.cameraPreview,:: onGetImageProxy)
     }
 
     private fun onGetImageProxy(imageProxy: ImageProxy) {
-        faceDetectionViewModel.startDetection(imageProxy,::onSuccess,::onFailure)
+        faceDetectionViewModel.startDetection(imageProxy, ::onSuccess, ::onFailure)
     }
+
     @ExperimentalGetImage
     private fun setupButtons() {
 
@@ -110,14 +108,9 @@ class FaceDetectionActivity : AppCompatActivity() {
             }
         cropToBBox?.let { bitmap ->
 
-              TFLiteModelExecutor.executeTensorModel(lifecycleScope, this, bitmap) {
-                  cameraXViewModel.recognizeFace(it)?.let {encodedFace->
-                      binding.faceInfo.apply {
-                          txtName.text = encodedFace.first.name
-                          ivSavedImage.setImageBitmap(encodedFace.second)
-                      }
-              }
-          }
+            TFLiteModelExecutor.executeTensorModel(lifecycleScope, this, bitmap) {
+
+            }
         }
     }
 

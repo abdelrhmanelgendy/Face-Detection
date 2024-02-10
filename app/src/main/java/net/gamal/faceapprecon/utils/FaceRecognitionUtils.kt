@@ -1,6 +1,5 @@
 package net.gamal.faceapprecon.utils
 
-import net.gamal.faceapprecon.detection.data.models.entity.EncodedFaceInformationEntity
 import net.gamal.faceapprecon.detection.domain.models.EncodedFaceInformation
 import kotlin.math.sqrt
 
@@ -39,10 +38,10 @@ object FaceRecognitionUtils {
         }
 
         // Check if the minimum distance is within the threshold
-        if (minDistance <= 0.9) {
-            return nearestEncodedFace
+        return if (minDistance <= 0.9) {
+            nearestEncodedFace
         } else {
-            return null // No face found within the threshold
+            null // No face found within the threshold
         }
     }
 }

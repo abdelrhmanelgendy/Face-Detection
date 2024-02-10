@@ -7,6 +7,7 @@ import androidx.camera.core.ImageProxy
 import androidx.lifecycle.AndroidViewModel
 import com.google.mlkit.vision.face.Face
 import dagger.hilt.android.lifecycle.HiltViewModel
+import net.gamal.faceapprecon.detection.data.repository.FaceDetectionRepository
 import javax.inject.Inject
 
 @HiltViewModel

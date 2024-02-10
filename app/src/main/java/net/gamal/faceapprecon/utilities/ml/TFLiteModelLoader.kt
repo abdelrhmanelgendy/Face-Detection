@@ -1,4 +1,4 @@
-package net.gamal.faceapprecon.ml
+package net.gamal.faceapprecon.utilities.ml
 
 import android.content.res.AssetManager
 import java.io.FileInputStream

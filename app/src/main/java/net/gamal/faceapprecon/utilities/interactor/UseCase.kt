@@ -2,7 +2,7 @@ package net.gamal.faceapprecon.utilities.interactor
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
-import net.gamal.faceapprecon.utils.Resource
+import net.gamal.faceapprecon.utilities.utils.Resource
 
 /**
 - Acts as a contract for all the use cases in our application:

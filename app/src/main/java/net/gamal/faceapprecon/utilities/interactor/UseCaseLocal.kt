@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
-import net.gamal.faceapprecon.utils.Resource
+import net.gamal.faceapprecon.utilities.utils.Resource
 
 abstract class UseCaseLocal<Domain, in Body> : UseCase<Domain, Body>() {
 

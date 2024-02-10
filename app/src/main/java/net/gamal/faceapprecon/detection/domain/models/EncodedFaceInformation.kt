@@ -1,7 +1,7 @@
 package net.gamal.faceapprecon.detection.domain.models
 
 data class EncodedFaceInformation(
-    val id:Int,
+    val id:Int=-1,
     val name: String,
     val faceEmbedding: FloatArray
 ) {

@@ -1,4 +1,4 @@
-package net.gamal.faceapprecon.utils
+package net.gamal.faceapprecon.utilities.utils
 
 
 // A generic class that contains data and status about loading this data.

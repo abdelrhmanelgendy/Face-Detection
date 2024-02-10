@@ -3,7 +3,6 @@ package net.gamal.faceapprecon.detection.datasource.dao
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
-import kotlinx.coroutines.flow.Flow
 import net.gamal.faceapprecon.detection.data.models.entity.EncodedFaceInformationEntity
 
 
@@ -13,7 +12,7 @@ interface EncodedFacesDAO {
     suspend fun addNewFaceData(face: EncodedFaceInformationEntity):Unit
 
     @Query("Delete from people_faces where id =:id")
-    suspend fun deleteFaceById(id: Int):Unit
+    suspend fun deleteFaceById(id: Int)
 
     @Query("Select * from people_faces")
     suspend fun getAllFaces(): List<EncodedFaceInformationEntity>

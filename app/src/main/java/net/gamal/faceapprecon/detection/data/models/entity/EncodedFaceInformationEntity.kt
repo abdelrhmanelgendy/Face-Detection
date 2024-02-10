@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "people_faces")
 data class EncodedFaceInformationEntity(
     @PrimaryKey(autoGenerate = true)
-    val id:Int,
+    val id:Int? = null,
     val name: String,
     val faceEmbedding: FloatArray
 ) {
@@ -25,7 +25,7 @@ data class EncodedFaceInformationEntity(
 
     override fun hashCode(): Int {
         var result = id
-        result = 31 * result + name.hashCode()
+        result = 31 * (result?:1) + name.hashCode()
         result = 31 * result + faceEmbedding.contentHashCode()
         return result
     }

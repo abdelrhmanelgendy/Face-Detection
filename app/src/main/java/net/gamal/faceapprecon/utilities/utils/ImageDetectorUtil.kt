@@ -1,4 +1,4 @@
-package net.gamal.faceapprecon.utils
+package net.gamal.faceapprecon.utilities.utils
 
 import android.graphics.Bitmap
 import android.graphics.Matrix

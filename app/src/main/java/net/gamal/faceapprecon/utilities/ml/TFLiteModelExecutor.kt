@@ -1,8 +1,9 @@
-package net.gamal.faceapprecon.ml
+package net.gamal.faceapprecon.utilities.ml
 
 import android.graphics.Bitmap
 import androidx.lifecycle.LifecycleCoroutineScope
 import kotlinx.coroutines.launch
+import net.gamal.faceapprecon.ml.MobileFaceNet
 import net.gamal.faceapprecon.presentation.FaceDetectionActivity
 import org.tensorflow.lite.DataType
 import org.tensorflow.lite.support.common.ops.NormalizeOp
@@ -10,7 +11,6 @@ import org.tensorflow.lite.support.image.ImageProcessor
 import org.tensorflow.lite.support.image.TensorImage
 import org.tensorflow.lite.support.image.ops.ResizeOp
 import org.tensorflow.lite.support.tensorbuffer.TensorBuffer
-import kotlin.math.sqrt
 
 object TFLiteModelExecutor {
     fun executeTensorModel(

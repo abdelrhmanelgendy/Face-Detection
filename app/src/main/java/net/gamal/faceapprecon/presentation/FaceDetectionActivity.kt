@@ -14,9 +14,11 @@ import com.google.mlkit.vision.face.Face
 import dagger.hilt.android.AndroidEntryPoint
 import net.gamal.faceapprecon.camera.data.model.FaceBox
 import net.gamal.faceapprecon.databinding.ActivityFaceDetectionBinding
-import net.gamal.faceapprecon.ml.TFLiteModelExecutor
-import net.gamal.faceapprecon.utils.ImageDetectorUtil
-import net.gamal.faceapprecon.utils.MediaUtils.flip
+import net.gamal.faceapprecon.detection.domain.models.EncodedFaceInformation
+import net.gamal.faceapprecon.presentation.dialogs.SaveFaceDialog
+import net.gamal.faceapprecon.utilities.ml.TFLiteModelExecutor
+import net.gamal.faceapprecon.utilities.utils.ImageDetectorUtil
+import net.gamal.faceapprecon.utilities.utils.MediaUtils.flip
 
 @AndroidEntryPoint
 class FaceDetectionActivity : AppCompatActivity() {
@@ -52,21 +54,21 @@ class FaceDetectionActivity : AppCompatActivity() {
                 binding.cameraPreview, this, ::onGetImageProxy
             )
         }
-//        val saveFaceDialog = SaveFaceDialog()
-//        saveFaceDialog.setOnSaveFaceClicked { name, bitmap ->
-//            bitmap?.let {
-//                TFLiteModelExecutor.executeTensorModel(lifecycleScope, this, it) {
-//                    cameraXViewModel.saveFace(name, it,bitmap)
-//                }
-//            }
-//        }
+        val saveFaceDialog = SaveFaceDialog()
+        saveFaceDialog.setOnSaveFaceClicked { name, bitmap ->
+            bitmap?.let {
+                TFLiteModelExecutor.executeTensorModel(lifecycleScope, this, it) {
+                    faceDetectionViewModel.insertFace(EncodedFaceInformation(name=name, faceEmbedding = it))
+                }
+            }
+        }
 
-//        binding.saveFaceButton.setOnClickListener {
-//            currentBox?.let {
-//                saveFaceDialog.setFaceBitmap(it)
-//                saveFaceDialog.show(supportFragmentManager, "SaveFaceDialog")
-//            }
-//        }
+        binding.saveFaceButton.setOnClickListener {
+            currentBox?.let {
+                saveFaceDialog.setFaceBitmap(it)
+                saveFaceDialog.show(supportFragmentManager, "SaveFaceDialog")
+            }
+        }
     }
 
     @OptIn(ExperimentalGetImage::class)

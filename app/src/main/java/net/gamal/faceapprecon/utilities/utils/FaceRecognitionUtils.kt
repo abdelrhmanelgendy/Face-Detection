@@ -1,4 +1,4 @@
-package net.gamal.faceapprecon.utils
+package net.gamal.faceapprecon.utilities.utils
 
 import net.gamal.faceapprecon.detection.domain.models.EncodedFaceInformation
 import kotlin.math.sqrt

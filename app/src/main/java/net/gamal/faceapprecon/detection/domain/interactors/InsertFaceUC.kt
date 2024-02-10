@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.flow
 import net.gamal.faceapprecon.detection.data.repository.EncodedFaceRepository
 import net.gamal.faceapprecon.detection.domain.models.EncodedFaceInformation
 import net.gamal.faceapprecon.utilities.interactor.UseCaseLocal
-import net.gamal.faceapprecon.utils.FaceRecognitionUtils
+import net.gamal.faceapprecon.utilities.utils.FaceRecognitionUtils
 import javax.inject.Inject
 
 class InsertFaceUC @Inject constructor(private val repo: EncodedFaceRepository) :
@@ -23,7 +23,8 @@ class InsertFaceUC @Inject constructor(private val repo: EncodedFaceRepository) 
 
     private suspend fun checkBodyExists(body: EncodedFaceInformation): Boolean {
         val allFaces = repo.getAllFaces()
+        if (allFaces.isEmpty()) return false
         val nearestFaceResult = FaceRecognitionUtils.findNearestFace(body, allFaces)
-        return nearestFaceResult == null
+        return nearestFaceResult != null
     }
 }

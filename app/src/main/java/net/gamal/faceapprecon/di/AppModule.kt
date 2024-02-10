@@ -7,9 +7,11 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import net.gamal.faceapprecon.detection.data.repository.EncodedFaceRepository
 import net.gamal.faceapprecon.detection.data.repository.localDs.EncodedFaceLocalDS
 import net.gamal.faceapprecon.detection.datasource.dao.EncodedFacesDAO
 import net.gamal.faceapprecon.detection.datasource.db.EncodedFacesDatabase
+import net.gamal.faceapprecon.detection.domain.repository.IEncodedFaceRepository
 import net.gamal.faceapprecon.detection.domain.repository.localDs.IEncodedFaceLocalDS
 import javax.inject.Singleton
 
@@ -21,7 +23,8 @@ object AppModule {
     @Provides
     fun provideFacesDB(@ApplicationContext context: Context): EncodedFacesDatabase =
         Room.databaseBuilder(context, EncodedFacesDatabase::class.java, "faces_db")
-            .fallbackToDestructiveMigration().build()
+            .build()
+
 
     @Singleton
     @Provides
@@ -30,6 +33,10 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideEncodedFacesDAO(dao: EncodedFacesDAO): IEncodedFaceLocalDS = EncodedFaceLocalDS(dao)
+    fun provideEncodedFaceLocalDS(dao: EncodedFacesDAO): IEncodedFaceLocalDS = EncodedFaceLocalDS(dao)
+
+    @Singleton
+    @Provides
+    fun provideEncodedFaceRepository(localDS: IEncodedFaceLocalDS): IEncodedFaceRepository = EncodedFaceRepository(localDS)
 
 }

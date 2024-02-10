@@ -6,6 +6,10 @@ import androidx.appcompat.app.AppCompatActivity
 import dagger.hilt.android.AndroidEntryPoint
 import net.gamal.faceapprecon.databinding.ActivityMainBinding
 import net.gamal.faceapprecon.presentation.FaceDetectionActivity
+import net.gamal.faceapprecon.utilities.cameraPermissionRequest
+import net.gamal.faceapprecon.utilities.isPermissionGranted
+import net.gamal.faceapprecon.utilities.navToActivity
+import net.gamal.faceapprecon.utilities.openPermissionSetting
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {

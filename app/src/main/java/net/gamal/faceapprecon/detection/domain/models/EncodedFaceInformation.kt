@@ -1,6 +1,7 @@
-package net.gamal.faceapprecon.facedetection.data.model
+package net.gamal.faceapprecon.detection.domain.models
 
 data class EncodedFaceInformation(
+    val id:Int,
     val name: String,
     val faceEmbedding: FloatArray
 ) {
@@ -10,6 +11,7 @@ data class EncodedFaceInformation(
 
         other as EncodedFaceInformation
 
+        if (id != other.id) return false
         if (name != other.name) return false
         if (!faceEmbedding.contentEquals(other.faceEmbedding)) return false
 
@@ -17,7 +19,8 @@ data class EncodedFaceInformation(
     }
 
     override fun hashCode(): Int {
-        var result = name.hashCode()
+        var result = id
+        result = 31 * result + name.hashCode()
         result = 31 * result + faceEmbedding.contentHashCode()
         return result
     }

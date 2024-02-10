@@ -1,4 +1,4 @@
-package net.gamal.faceapprecon.facedetection.presentation
+package net.gamal.faceapprecon.presentation
 
 import android.graphics.Bitmap
 import android.os.Bundle
@@ -11,20 +11,22 @@ import androidx.camera.core.ExperimentalGetImage
 import androidx.camera.core.ImageProxy
 import androidx.lifecycle.lifecycleScope
 import com.google.mlkit.vision.face.Face
+import dagger.hilt.android.AndroidEntryPoint
 import net.gamal.faceapprecon.databinding.ActivityFaceDetectionBinding
-import net.gamal.faceapprecon.facedetection.data.model.FaceBox
-import net.gamal.faceapprecon.facedetection.presentation.dialogs.SaveFaceDialog
-import net.gamal.faceapprecon.facedetection.presentation.dialogs.ShowFaceDialog
+import net.gamal.faceapprecon.camera.data.model.FaceBox
+import net.gamal.faceapprecon.presentation.dialogs.SaveFaceDialog
+import net.gamal.faceapprecon.presentation.dialogs.ShowFaceDialog
 import net.gamal.faceapprecon.ml.TFLiteModelExecutor
 import net.gamal.faceapprecon.utils.ImageDetectorUtil
 import net.gamal.faceapprecon.utils.MediaUtils.flip
 
-
+@AndroidEntryPoint
 class FaceDetectionActivity : AppCompatActivity() {
 
     private var currentBox: Bitmap? = null
     private lateinit var binding: ActivityFaceDetectionBinding
     private val cameraXViewModel by viewModels<CameraXViewModel>()
+    private val faceDetectionViewModel by viewModels<FaceDetectionViewModel>()
 
     @ExperimentalGetImage
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,37 +39,36 @@ class FaceDetectionActivity : AppCompatActivity() {
 
     @ExperimentalGetImage
     private fun setupCamera() {
-        cameraXViewModel.processCameraProvider.observe(this) {
-            cameraXViewModel.bindCameraPreview(binding.cameraPreview, this)
-            cameraXViewModel.bindInputAnalyser(
-                this,
-                binding.cameraPreview,
-                ::onSuccess,
-                ::onFailure
-            )
-        }
+            cameraXViewModel.setupCamera(this)
+            cameraXViewModel.bindInputAnalyser(this, binding.cameraPreview, ::onGetImageProxy)
+    }
+
+    private fun onGetImageProxy(imageProxy: ImageProxy) {
+        faceDetectionViewModel.startDetection(imageProxy,::onSuccess,::onFailure)
     }
     @ExperimentalGetImage
     private fun setupButtons() {
-        val saveFaceDialog = SaveFaceDialog()
-        saveFaceDialog.setOnSaveFaceClicked { name, bitmap ->
-            bitmap?.let {
-                TFLiteModelExecutor.executeTensorModel(lifecycleScope, this, it) {
-                    cameraXViewModel.saveFace(name, it,bitmap)
-                }
-            }
-        }
+
         binding.switchCamera.setOnClickListener {
             cameraXViewModel.switchCamera(
-                binding.cameraPreview, this, ::onSuccess, ::onFailure
+                binding.cameraPreview, this, ::onGetImageProxy
             )
         }
-        binding.saveFaceButton.setOnClickListener {
-            currentBox?.let {
-                saveFaceDialog.setFaceBitmap(it)
-                saveFaceDialog.show(supportFragmentManager, "SaveFaceDialog")
-            }
-        }
+//        val saveFaceDialog = SaveFaceDialog()
+//        saveFaceDialog.setOnSaveFaceClicked { name, bitmap ->
+//            bitmap?.let {
+//                TFLiteModelExecutor.executeTensorModel(lifecycleScope, this, it) {
+//                    cameraXViewModel.saveFace(name, it,bitmap)
+//                }
+//            }
+//        }
+
+//        binding.saveFaceButton.setOnClickListener {
+//            currentBox?.let {
+//                saveFaceDialog.setFaceBitmap(it)
+//                saveFaceDialog.show(supportFragmentManager, "SaveFaceDialog")
+//            }
+//        }
     }
 
     @OptIn(ExperimentalGetImage::class)

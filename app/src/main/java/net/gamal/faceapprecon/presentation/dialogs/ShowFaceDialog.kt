@@ -1,4 +1,4 @@
-package net.gamal.faceapprecon.facedetection.presentation.dialogs
+package net.gamal.faceapprecon.presentation.dialogs
 
 import android.graphics.Bitmap
 import android.os.Bundle

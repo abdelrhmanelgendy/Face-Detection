@@ -37,4 +37,6 @@ object ImageDetectorUtil {
             )
         } else null
     }
+
+
 }

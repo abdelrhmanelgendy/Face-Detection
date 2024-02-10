@@ -1,4 +1,4 @@
-package net.gamal.faceapprecon.facedetection.presentation.views
+package net.gamal.faceapprecon.presentation.views
 
 import android.content.Context
 import android.graphics.Canvas

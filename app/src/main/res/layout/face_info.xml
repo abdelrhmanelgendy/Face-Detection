@@ -16,19 +16,19 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="180dp"
 
         android:gravity="center_vertical"
         android:orientation="horizontal"
-
-        app:layout_constraintBottom_toBottomOf="parent">
+>
 
         <ImageView
             android:id="@+id/iv_work"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
             android:background="#B3000000"
             android:padding="5dp"
+            android:layout_weight="1"
             android:src="@drawable/work" />
 
         <LinearLayout
@@ -233,10 +233,11 @@
 
         <ImageView
             android:id="@+id/iv_savedImage"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
             android:background="#B3000000"
             android:padding="5dp"
+            android:layout_weight="1"
             android:src="@drawable/work" />
     </LinearLayout>
 </LinearLayout>

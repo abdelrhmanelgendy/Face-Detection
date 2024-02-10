@@ -1,4 +1,4 @@
-package net.gamal.faceapprecon.facedetection.data.model
+package net.gamal.faceapprecon.camera.data.model
 
 
 import android.graphics.Canvas
@@ -7,7 +7,7 @@ import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.RectF
 import com.google.mlkit.vision.face.Face
-import net.gamal.faceapprecon.facedetection.presentation.views.FaceBoxOverlay
+import net.gamal.faceapprecon.presentation.views.FaceBoxOverlay
 
 class FaceBox(
     private val overlay: FaceBoxOverlay,

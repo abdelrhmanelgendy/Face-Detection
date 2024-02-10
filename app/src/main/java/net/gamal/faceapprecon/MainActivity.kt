@@ -3,8 +3,9 @@ package net.gamal.faceapprecon
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts.RequestPermission
 import androidx.appcompat.app.AppCompatActivity
+import dagger.hilt.android.AndroidEntryPoint
 import net.gamal.faceapprecon.databinding.ActivityMainBinding
-import net.gamal.faceapprecon.facedetection.presentation.FaceDetectionActivity
+import net.gamal.faceapprecon.presentation.FaceDetectionActivity
 
 class MainActivity : AppCompatActivity() {
 

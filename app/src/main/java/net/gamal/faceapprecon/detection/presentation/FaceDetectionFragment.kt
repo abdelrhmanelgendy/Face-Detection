@@ -131,11 +131,17 @@ class FaceDetectionFragment : Fragment() {
 
         binding.saveFaceButton.setOnClickListener {
             currentBox?.let {
-                println("setupSaveFaceButtons:: currentBox:: $it.has")
-                saveFaceDialog.setFaceBitmap(it)
-                saveFaceDialog.show(requireActivity().supportFragmentManager, "SaveFaceDialog")
-
-                face_detection_paused = true
+                if (saveFaceDialog.isAdded.not()||saveFaceDialog.isVisible.not()) {
+                    try {
+                        saveFaceDialog.setFaceBitmap(it)
+                        saveFaceDialog.show(
+                            requireActivity().supportFragmentManager, "SaveFaceDialog"
+                        )
+                        face_detection_paused = true
+                    } catch (e: Exception) {
+                        return@setOnClickListener
+                    }
+                }
             }
         }
     }
@@ -246,7 +252,7 @@ class FaceDetectionFragment : Fragment() {
             txtRightEyeValue.text = "0.00"
             ivWork.setImageDrawable(
                 ContextCompat.getDrawable(
-                    requireContext(), R.drawable.baseline_person_24
+                    requireContext(), R.drawable.user
                 )
             )
         }

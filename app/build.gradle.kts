@@ -1,3 +1,6 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -9,13 +12,22 @@ plugins {
 android {
     namespace = "net.gamal.faceapprecon"
     compileSdk = 34
-
+    signingConfigs {
+        create("release") {
+            val keyStoreProp = getProps("$rootDir/app/configs/keystore.properties")
+            storeFile = file("configs/" + keyStoreProp.getProperty("storeFile"))
+            storePassword = keyStoreProp.getProperty("storePassword")
+            keyAlias = keyStoreProp.getProperty("keyAlias")
+            keyPassword = keyStoreProp.getProperty("keyPassword")
+        }
+    }
     defaultConfig {
         applicationId = "net.gamal.faceapprecon"
         minSdk = 27
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
+        signingConfig = signingConfigs.getByName("release")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         ndk {
@@ -27,10 +39,12 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isShrinkResources = true
+            isMinifyEnabled = true
+            isDebuggable = false
+            signingConfig = signingConfigs["release"]
             proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             )
         }
     }
@@ -82,6 +96,12 @@ dependencies {
     implementation("com.google.dagger:hilt-android:2.48")
     kapt("com.google.dagger:hilt-android-compiler:2.48")
 
+}
+
+fun getProps(path: String): java.util.Properties {
+    val props = Properties()
+    props.load(FileInputStream(rootProject.file(path)))
+    return props
 }
 
 kapt {

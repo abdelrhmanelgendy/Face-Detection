@@ -104,7 +104,7 @@ class CameraXRepository(private val context: Context) {
         bindCameraPreview(previewView, lifecycleOwner,onImageProxy)
     }
 
-    private fun unbindCamera() {
+    fun unbindCamera() {
         cameraProvider.unbindAll()
     }
 

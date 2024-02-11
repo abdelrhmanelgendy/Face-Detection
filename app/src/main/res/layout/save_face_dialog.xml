@@ -30,5 +30,12 @@
         android:text="Save"
         android:backgroundTint="#565656"
         />
+    <Button
+        android:id="@+id/cancel_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Cancel"
+        android:backgroundTint="#565656"
+        />
 
 </LinearLayout>

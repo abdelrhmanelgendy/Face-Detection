@@ -1,10 +1,12 @@
 package net.gamal.faceapprecon.detection.domain.models
 
+import android.graphics.Bitmap
+
 data class EncodedFaceInformation(
-    val id:Int=-1,
-    val name: String,
-    val faceEmbedding: FloatArray
+    val id: Int = -1, val name: String, val faceEmbedding: FloatArray, var faceImage: Bitmap? = null
 ) {
+    constructor(faceEmbedding: FloatArray) : this(-1, "", faceEmbedding)
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false

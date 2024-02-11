@@ -1,5 +1,6 @@
 package net.gamal.faceapprecon.utilities.ml
 
+import android.content.Context
 import android.graphics.Bitmap
 import androidx.lifecycle.LifecycleCoroutineScope
 import kotlinx.coroutines.launch
@@ -12,10 +13,11 @@ import org.tensorflow.lite.support.image.TensorImage
 import org.tensorflow.lite.support.image.ops.ResizeOp
 import org.tensorflow.lite.support.tensorbuffer.TensorBuffer
 
-object TFLiteModelExecutor {
+class TFLiteModelExecutor(context: Context) {
+    private val model = MobileFaceNet.newInstance(context)
+
     fun executeTensorModel(
         lifecycleScope: LifecycleCoroutineScope,
-        faceDetectionActivity: FaceDetectionActivity,
         faceBitmap: Bitmap?,
         onSuccess: (FloatArray) -> Unit
     ) {
@@ -34,10 +36,10 @@ object TFLiteModelExecutor {
 
 
         lifecycleScope.launch {
-            val model = MobileFaceNet.newInstance(faceDetectionActivity)
             val outputs = model.process(inputFeature0)
             val outputFeature0 = outputs.outputFeature0AsTensorBuffer
             val faceEncodedData = outputFeature0.floatArray
+            println("Face encoded data: ${faceEncodedData.contentToString()}")
             onSuccess(faceEncodedData)
         }
     }

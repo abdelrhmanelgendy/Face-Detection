@@ -3,7 +3,11 @@ package net.gamal.faceapprecon.detection.domain.models
 import android.graphics.Bitmap
 
 data class EncodedFaceInformation(
-    val id: Int = -1, val name: String, val faceEmbedding: FloatArray, var faceImage: Bitmap? = null
+    val id: Int = -1,
+    val name: String,
+    val faceEmbedding: FloatArray,
+    var faceImage: Bitmap? = null,
+    var addedAt: Long = System.currentTimeMillis()
 ) {
     constructor(faceEmbedding: FloatArray) : this(-1, "", faceEmbedding)
 

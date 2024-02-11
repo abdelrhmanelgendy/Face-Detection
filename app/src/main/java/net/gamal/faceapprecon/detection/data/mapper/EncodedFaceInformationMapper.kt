@@ -5,10 +5,10 @@ import net.gamal.faceapprecon.detection.domain.models.EncodedFaceInformation
 
 object EncodedFaceInformationMapper {
     fun entityToDomain(entity: EncodedFaceInformationEntity): EncodedFaceInformation = entity.run {
-        EncodedFaceInformation(id!!, name, faceEmbedding)
+        EncodedFaceInformation(id!!, name, faceEmbedding,null,addedAt)
     }
 
     fun domainToEntity(domain: EncodedFaceInformation): EncodedFaceInformationEntity = domain.run {
-        EncodedFaceInformationEntity(name=domain.name,faceEmbedding= domain.faceEmbedding)
+        EncodedFaceInformationEntity(name=domain.name,faceEmbedding= domain.faceEmbedding, addedAt = domain.addedAt)
     }
 }

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/dash_board_nav"
+    app:startDestination="@id/faceDetectionFragment">
+
+    <fragment
+        android:id="@+id/faceDetectionFragment"
+        android:name="net.gamal.faceapprecon.detection.presentation.FaceDetectionFragment"
+        />
+    <fragment
+        android:id="@+id/savedFacesFragment"
+        android:name="net.gamal.faceapprecon.savedFaces.presentation.SavedFacesFragment"
+        android:label="SavedFacesFragment" />
+
+</navigation>

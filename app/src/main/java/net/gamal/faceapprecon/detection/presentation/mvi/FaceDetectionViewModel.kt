@@ -1,4 +1,4 @@
-package net.gamal.faceapprecon.presentation.mvi
+package net.gamal.faceapprecon.detection.presentation.mvi
 
 import android.app.Application
 import android.content.Context
@@ -48,7 +48,7 @@ class FaceDetectionViewModel @Inject constructor(
                 action.encodedFaceInformation, action.bitmap
             )
 
-            is FaceDetectionContract.FaceDetectionAction.FetchListOfFaceDetections -> getAllFaces()
+            is FaceDetectionContract.FaceDetectionAction.FetchListOfFaceDetections -> getAllFaces(action.requireImages)
             is FaceDetectionContract.FaceDetectionAction.FetchFaceDataByID -> getFacesById(action.id)
             is FaceDetectionContract.FaceDetectionAction.DeleteFaceDataByID -> deleteFacesById(
                 action.id
@@ -94,13 +94,13 @@ class FaceDetectionViewModel @Inject constructor(
                     println("insertFace:: Failure:: Face inserted successfully")
                     localBitmapRepository.saveBitmapToCacheDirectory(faceBitmap, encodedFace.name)
                     sendEvent(FaceDetectionContract.FaceDetectionEvent.FaceInsertedSuccessfully)
-                    processIntent(FaceDetectionContract.FaceDetectionAction.FetchListOfFaceDetections)
+                    processIntent(FaceDetectionContract.FaceDetectionAction.FetchListOfFaceDetections(false))
                 }
             }
         }
     }
 
-    private fun getAllFaces() {
+    private fun getAllFaces(requireImages: Boolean) {
         getAllFacesUC.invoke(viewModelScope, Unit) { result ->
             when (result) {
                 is Resource.Failure -> {
@@ -113,7 +113,12 @@ class FaceDetectionViewModel @Inject constructor(
 
                 is Resource.Success -> {
                     allFaces = result.model
-                    sendEvent(FaceDetectionContract.FaceDetectionEvent.FetchedListOfFaces(result.model))
+                    if(requireImages){
+                        allFaces.forEach {
+                            it.faceImage = localBitmapRepository.getSavedFileFromInternalCache(it.name)
+                        }
+                    }
+                    sendEvent(FaceDetectionContract.FaceDetectionEvent.FetchedListOfFaces(allFaces))
                 }
             }
         }
@@ -132,7 +137,7 @@ class FaceDetectionViewModel @Inject constructor(
 
                 is Resource.Success -> {
                     println("deleteFacesById:: Face deleted successfully")
-                    getAllFaces()
+                    getAllFaces(false)
                 }
             }
         }

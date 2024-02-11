@@ -1,4 +1,4 @@
-package net.gamal.faceapprecon.presentation.mvi
+package net.gamal.faceapprecon.detection.presentation.mvi
 
 import android.app.Application
 import androidx.camera.core.ExperimentalGetImage

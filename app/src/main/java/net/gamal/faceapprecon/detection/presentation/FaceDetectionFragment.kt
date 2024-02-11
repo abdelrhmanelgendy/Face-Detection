@@ -1,16 +1,19 @@
-package net.gamal.faceapprecon.presentation
+package net.gamal.faceapprecon.detection.presentation
 
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
-import androidx.activity.viewModels
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.annotation.OptIn
-import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ExperimentalGetImage
 import androidx.camera.core.ImageProxy
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.snackbar.Snackbar
 import com.google.mlkit.vision.face.Face
@@ -20,35 +23,47 @@ import kotlinx.coroutines.launch
 import net.gamal.faceapprecon.R
 import net.gamal.faceapprecon.camera.data.model.FaceBox
 import net.gamal.faceapprecon.databinding.ActivityFaceDetectionBinding
+import net.gamal.faceapprecon.detection.presentation.mvi.CameraXViewModel
+import net.gamal.faceapprecon.detection.presentation.mvi.FaceDetectionContract
+import net.gamal.faceapprecon.detection.presentation.mvi.FaceDetectionViewModel
 import net.gamal.faceapprecon.presentation.dialogs.SaveFaceDialog
-import net.gamal.faceapprecon.presentation.mvi.CameraXViewModel
-import net.gamal.faceapprecon.presentation.mvi.FaceDetectionContract
-import net.gamal.faceapprecon.presentation.mvi.FaceDetectionViewModel
 import net.gamal.faceapprecon.utilities.hapticFeeds.NFCHapticFeeds
 import net.gamal.faceapprecon.utilities.utils.ImageDetectorUtil
 import net.gamal.faceapprecon.utilities.utils.MediaUtils.flip
 
+
 @AndroidEntryPoint
-class FaceDetectionActivity : AppCompatActivity() {
+class FaceDetectionFragment : Fragment() {
 
     private var currentBox: Bitmap? = null
     private lateinit var binding: ActivityFaceDetectionBinding
-    private val cameraXViewModel by viewModels<CameraXViewModel>()
+
     private val faceDetectionViewModel by viewModels<FaceDetectionViewModel>()
+    private val cameraXViewModel by viewModels<CameraXViewModel>()
+    private val nfcHapticFeeds by lazy {
+        NFCHapticFeeds(requireContext())
+    }
+
     private var face_detection_paused = false
-    private val nfcHapticFeeds = NFCHapticFeeds(this)
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = ActivityFaceDetectionBinding.inflate(layoutInflater)
+        return binding.root
+    }
 
     @ExperimentalGetImage
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityFaceDetectionBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         setupCamera()
         setupCameraButtons()
         setupSaveFaceButtons()
         observerOnVMEvent()
         observerOnVMState()
-        faceDetectionViewModel.processIntent(FaceDetectionContract.FaceDetectionAction.FetchListOfFaceDetections)
+        faceDetectionViewModel.processIntent(FaceDetectionContract.FaceDetectionAction.FetchListOfFaceDetections())
     }
 
     private fun observerOnVMState() {
@@ -71,7 +86,6 @@ class FaceDetectionActivity : AppCompatActivity() {
             faceDetectionViewModel.singleEvent.collect { event ->
                 when (event) {
                     is FaceDetectionContract.FaceDetectionEvent.FetchedListOfFaces -> {
-                        println("observerOnVMState:: FetchedListOfFaces:: ${event.faces}")
                     }
 
                     is FaceDetectionContract.FaceDetectionEvent.FetchedFaceByID -> {
@@ -85,13 +99,9 @@ class FaceDetectionActivity : AppCompatActivity() {
 
                     is FaceDetectionContract.FaceDetectionEvent.FaceRecognizedSuccessfully -> {
                         println("observerOnVMState::  FaceRecognizedSuccessfully:: ${event.recognizedFace}")
-                        binding.faceInfo.root.visibility = android.view.View.INVISIBLE
-                        binding.faceFoundView.root.visibility = android.view.View.VISIBLE
-                        binding.faceFoundView.txtFaceName.text = StringBuilder().apply {
-                            append("1 Match Found With\n")
-                            append("Name: ")
-                            append(event.recognizedFace.name)
-                        }
+                        binding.faceInfo.root.visibility = View.INVISIBLE
+                        binding.faceFoundView.root.visibility = View.VISIBLE
+                        binding.faceFoundView.txtFaceName.text = event.recognizedFace.name
                         binding.faceFoundView.ivSavedImage.setImageBitmap(event.recognizedFace.faceImage)
                         nfcHapticFeeds.playSound(300)
 
@@ -102,15 +112,17 @@ class FaceDetectionActivity : AppCompatActivity() {
         }
     }
 
-    private val saveFaceDialog = SaveFaceDialog()
+    private val saveFaceDialog by lazy {
+        SaveFaceDialog()
+    }
 
     private fun setupSaveFaceButtons() {
-        saveFaceDialog.isCancelable = false
+        saveFaceDialog.setCancelable(false)
         saveFaceDialog.setOnSaveFaceClicked { name, bitmap ->
             bitmap?.let {
                 faceDetectionViewModel.processIntent(
                     FaceDetectionContract.FaceDetectionAction.EncodeAndInsertFace(
-                        name, it, lifecycleScope, this
+                        name, it, lifecycleScope, requireContext()
                     )
                 )
             }
@@ -121,8 +133,10 @@ class FaceDetectionActivity : AppCompatActivity() {
 
         binding.saveFaceButton.setOnClickListener {
             currentBox?.let {
+                println("setupSaveFaceButtons:: currentBox:: $it.has")
                 saveFaceDialog.setFaceBitmap(it)
-                saveFaceDialog.show(supportFragmentManager, "SaveFaceDialog")
+                saveFaceDialog.show(requireActivity().supportFragmentManager, "SaveFaceDialog")
+
                 face_detection_paused = true
             }
         }
@@ -159,8 +173,8 @@ class FaceDetectionActivity : AppCompatActivity() {
             unBindFaceView()
 //            // ...handle no faces scenario...
             lifecycleScope.launch {
-                binding.faceInfo.root.visibility = android.view.View.VISIBLE
-                binding.faceFoundView.root.visibility = android.view.View.INVISIBLE
+                binding.faceInfo.root.visibility = View.VISIBLE
+                binding.faceFoundView.root.visibility = View.INVISIBLE
             }
             return
         }
@@ -196,7 +210,7 @@ class FaceDetectionActivity : AppCompatActivity() {
         cropToBBox?.let { bitmap ->
             faceDetectionViewModel.processIntent(
                 FaceDetectionContract.FaceDetectionAction.EncodeAndFindFace(
-                    lifecycleScope, this, bitmap
+                    lifecycleScope, requireContext(), bitmap
                 )
             )
         }
@@ -232,7 +246,12 @@ class FaceDetectionActivity : AppCompatActivity() {
             txtSmilingValue.text = "0.00"
             txtLeftEyeValue.text = "0.00"
             txtRightEyeValue.text = "0.00"
-            ivWork.setImageDrawable(ContextCompat.getDrawable(this@FaceDetectionActivity, R.drawable.baseline_person_24))
+            ivWork.setImageDrawable(
+                ContextCompat.getDrawable(
+                    requireContext(),
+                    R.drawable.baseline_person_24
+                )
+            )
         }
     }
 
@@ -244,7 +263,7 @@ class FaceDetectionActivity : AppCompatActivity() {
     }
 
     companion object {
-        private val TAG = FaceDetectionActivity::class.simpleName
+        private val TAG = FaceDetectionFragment::class.simpleName
     }
 
 

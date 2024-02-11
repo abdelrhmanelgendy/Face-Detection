@@ -8,7 +8,8 @@ data class EncodedFaceInformationEntity(
     @PrimaryKey(autoGenerate = true)
     val id:Int? = null,
     val name: String,
-    val faceEmbedding: FloatArray
+    val faceEmbedding: FloatArray,
+    val addedAt: Long = System.currentTimeMillis()
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

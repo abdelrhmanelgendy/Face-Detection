@@ -7,7 +7,7 @@ import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.RectF
 import com.google.mlkit.vision.face.Face
-import net.gamal.faceapprecon.presentation.views.FaceBoxOverlay
+import net.gamal.faceapprecon.detection.presentation.views.FaceBoxOverlay
 
 class FaceBox(
     private val overlay: FaceBoxOverlay,

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:paddingTop="30dp"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/alfa_slab_one"
+        android:text="Saved Faces"
+        android:paddingStart="15dp"
+        android:textStyle="normal"
+        android:textColor="@color/black"
+        android:textSize="28dp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/saved_faces_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingHorizontal="15dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="5dp"
+        tools:listitem="@layout/saved_faces_rec_item"
+        />
+</LinearLayout>

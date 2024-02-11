@@ -1,4 +1,4 @@
-package net.gamal.faceapprecon.presentation.mvi
+package net.gamal.faceapprecon.detection.presentation.mvi
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -19,7 +19,7 @@ interface FaceDetectionContract {
             FaceDetectionAction()
 
         data class DeleteFaceDataByID(val id: Int) : FaceDetectionAction()
-        data object FetchListOfFaceDetections : FaceDetectionAction()
+        data class FetchListOfFaceDetections(val requireImages:Boolean=false) : FaceDetectionAction()
         data class FetchFaceDataByID(val id: Int) : FaceDetectionAction()
         data class EncodeAndInsertFace(
             val name: String,

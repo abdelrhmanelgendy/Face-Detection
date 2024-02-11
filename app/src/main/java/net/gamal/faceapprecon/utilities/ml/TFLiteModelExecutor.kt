@@ -5,7 +5,6 @@ import android.graphics.Bitmap
 import androidx.lifecycle.LifecycleCoroutineScope
 import kotlinx.coroutines.launch
 import net.gamal.faceapprecon.ml.MobileFaceNet
-import net.gamal.faceapprecon.presentation.FaceDetectionActivity
 import org.tensorflow.lite.DataType
 import org.tensorflow.lite.support.common.ops.NormalizeOp
 import org.tensorflow.lite.support.image.ImageProcessor

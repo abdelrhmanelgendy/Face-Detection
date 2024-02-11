@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/faceDetectionFragment"
+        android:icon="@drawable/face_detection"
+        android:title="Face Recognition" />
+    <item
+        android:id="@+id/savedFacesFragment"
+        android:icon="@drawable/gallery_24"
+        android:title="Faces" />
+</menu>

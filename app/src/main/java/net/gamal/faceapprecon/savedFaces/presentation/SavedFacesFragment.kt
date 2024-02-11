@@ -22,8 +22,12 @@ class SavedFacesFragment : Fragment() {
     private lateinit var binding: FragmentSavedFacesBinding
     private val faceDetectionViewModel by viewModels<FaceDetectionViewModel>()
     private val adapter by lazy {
-        SavedFacesAdapter(requireContext()){
-            faceDetectionViewModel.processIntent(FaceDetectionContract.FaceDetectionAction.DeleteFaceDataByID(it))
+        SavedFacesAdapter(requireContext()) {
+            faceDetectionViewModel.processIntent(
+                FaceDetectionContract.FaceDetectionAction.DeleteFaceDataByID(
+                    it
+                )
+            )
         }
     }
 

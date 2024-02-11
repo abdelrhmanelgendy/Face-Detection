@@ -47,9 +47,7 @@ class FaceDetectionFragment : Fragment() {
     private var face_detection_paused = false
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = ActivityFaceDetectionBinding.inflate(layoutInflater)
         return binding.root
@@ -248,8 +246,7 @@ class FaceDetectionFragment : Fragment() {
             txtRightEyeValue.text = "0.00"
             ivWork.setImageDrawable(
                 ContextCompat.getDrawable(
-                    requireContext(),
-                    R.drawable.baseline_person_24
+                    requireContext(), R.drawable.baseline_person_24
                 )
             )
         }

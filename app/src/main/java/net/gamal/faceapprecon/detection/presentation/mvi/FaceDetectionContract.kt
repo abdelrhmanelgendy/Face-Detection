@@ -15,11 +15,16 @@ import kotlin.reflect.KFunction2
 interface FaceDetectionContract {
 
     sealed class FaceDetectionAction : ViewAction {
-        data class InsertFaceData(val encodedFaceInformation: EncodedFaceInformation,val bitmap: Bitmap) :
+        data class InsertFaceData(
+            val encodedFaceInformation: EncodedFaceInformation,
+            val bitmap: Bitmap
+        ) :
             FaceDetectionAction()
 
         data class DeleteFaceDataByID(val id: Int) : FaceDetectionAction()
-        data class FetchListOfFaceDetections(val requireImages:Boolean=false) : FaceDetectionAction()
+        data class FetchListOfFaceDetections(val requireImages: Boolean = false) :
+            FaceDetectionAction()
+
         data class FetchFaceDataByID(val id: Int) : FaceDetectionAction()
         data class EncodeAndInsertFace(
             val name: String,
@@ -46,7 +51,8 @@ interface FaceDetectionContract {
         data class FetchedFaceByID(val face: EncodedFaceInformation) : FaceDetectionEvent()
 
         data object FaceInsertedSuccessfully : FaceDetectionEvent()
-        data class FaceRecognizedSuccessfully(val recognizedFace:EncodedFaceInformation) : FaceDetectionEvent()
+        data class FaceRecognizedSuccessfully(val recognizedFace: EncodedFaceInformation) :
+            FaceDetectionEvent()
     }
 
     data class FaceDetectionState(

@@ -35,7 +35,7 @@ class FaceDetectionViewModel @Inject constructor(
     private val deleteFacesByIdUC: DeleteFacesByIdUC,
     private val getAllFacesUC: GetAllFacesUC,
     private val getFacesByIdUC: GetFacesByIdUC,
-    private val encodedFaceModelExecutor:EncodedFaceModelExecutor,
+    private val encodedFaceModelExecutor: EncodedFaceModelExecutor,
     private val tFLiteModelExecutor: TFLiteModelExecutor,
 ) : BaseViewModel<FaceDetectionContract.FaceDetectionAction, FaceDetectionContract.FaceDetectionEvent, FaceDetectionContract.FaceDetectionState>(
     FaceDetectionContract.FaceDetectionState.initial()
@@ -48,7 +48,10 @@ class FaceDetectionViewModel @Inject constructor(
                 action.encodedFaceInformation, action.bitmap
             )
 
-            is FaceDetectionContract.FaceDetectionAction.FetchListOfFaceDetections -> getAllFaces(action.requireImages)
+            is FaceDetectionContract.FaceDetectionAction.FetchListOfFaceDetections -> getAllFaces(
+                action.requireImages
+            )
+
             is FaceDetectionContract.FaceDetectionAction.FetchFaceDataByID -> getFacesById(action.id)
             is FaceDetectionContract.FaceDetectionAction.DeleteFaceDataByID -> deleteFacesById(
                 action.id
@@ -94,7 +97,11 @@ class FaceDetectionViewModel @Inject constructor(
                     println("insertFace:: Failure:: Face inserted successfully")
                     localBitmapRepository.saveBitmapToCacheDirectory(faceBitmap, encodedFace.name)
                     sendEvent(FaceDetectionContract.FaceDetectionEvent.FaceInsertedSuccessfully)
-                    processIntent(FaceDetectionContract.FaceDetectionAction.FetchListOfFaceDetections(false))
+                    processIntent(
+                        FaceDetectionContract.FaceDetectionAction.FetchListOfFaceDetections(
+                            false
+                        )
+                    )
                 }
             }
         }
@@ -113,9 +120,10 @@ class FaceDetectionViewModel @Inject constructor(
 
                 is Resource.Success -> {
                     allFaces = result.model
-                    if(requireImages){
+                    if (requireImages) {
                         allFaces.forEach {
-                            it.faceImage = localBitmapRepository.getSavedFileFromInternalCache(it.name)
+                            it.faceImage =
+                                localBitmapRepository.getSavedFileFromInternalCache(it.name)
                         }
                     }
                     sendEvent(FaceDetectionContract.FaceDetectionEvent.FetchedListOfFaces(allFaces))
@@ -172,15 +180,15 @@ class FaceDetectionViewModel @Inject constructor(
     private fun encodeAndFindFace(
         lifecycle: LifecycleCoroutineScope, context: Context, bitmap: Bitmap
     ) {
-       lifecycle.launch(Dispatchers.Default){
-           encodeFace(lifecycle, context, bitmap) {
-               val nearestFaceResult =
-                   FaceRecognitionUtils.findNearestFace(EncodedFaceInformation(it), allFaces)
-               nearestFaceResult?.let {
-                   loadImageByName(it)
-               }
-           }
-       }
+        lifecycle.launch(Dispatchers.Default) {
+            encodeFace(lifecycle, context, bitmap) {
+                val nearestFaceResult =
+                    FaceRecognitionUtils.findNearestFace(EncodedFaceInformation(it), allFaces)
+                nearestFaceResult?.let {
+                    loadImageByName(it)
+                }
+            }
+        }
     }
 
     private fun loadImageByName(it: EncodedFaceInformation) {

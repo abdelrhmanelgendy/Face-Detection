@@ -255,6 +255,19 @@ class FaceDetectionFragment : Fragment() {
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+        cameraXViewModel.clear()
+        currentBox = null
+        onSuccess(emptyList(), null)
+    }
+
+    @OptIn(ExperimentalGetImage::class)
+    override fun onResume() {
+        super.onResume()
+        setupCamera()
+    }
+
     override fun onStop() {
         super.onStop()
         cameraXViewModel.clear()

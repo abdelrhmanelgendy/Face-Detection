@@ -137,7 +137,7 @@ class FaceDetectionViewModel @Inject constructor(
 
                 is Resource.Success -> {
                     println("deleteFacesById:: Face deleted successfully")
-                    getAllFaces(false)
+                    getAllFaces(true)
                 }
             }
         }

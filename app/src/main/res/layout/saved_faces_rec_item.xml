@@ -38,21 +38,18 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif"
-                    android:lineHeight="20dp"
-                    android:text="Mark Newell"
+                    android:text=""
                     android:textColor="@color/black"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/tv_saved_face_time_stamp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif"
-                    android:lineHeight="20dp"
                     android:text="Face Added on 12/12/2020 12:12:12 PM"
                     android:textColor="@color/gray"
-                    android:textSize="16sp" />
+                    android:textSize="14sp" />
             </LinearLayout>
 
             <ImageView

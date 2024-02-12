@@ -24,7 +24,7 @@ internal object TonesGenerator : ITonesGenerator {
     //        For the row frequency: Approximately 1400 Hz
 //                For the column frequency: Approximately 2060 Hz
     override fun registerSuccessfulTone() {
-        playSound(FREQ_ONLINE_REQUEST.toDouble(), 300.0)
+        playSound(1300.toDouble(), 150.0)
      }
 
     override fun registerDeclinedTone() {

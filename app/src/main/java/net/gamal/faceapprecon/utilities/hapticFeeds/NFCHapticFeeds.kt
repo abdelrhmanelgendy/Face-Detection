@@ -24,7 +24,7 @@ internal class NFCHapticFeeds(context: Context) : INFCHapticFeeds {
     }
 
     fun playSound(durationInMillis: Int) {
-        TonesGenerator.registerDefaultTone(durationInMillis.toDouble())
+        TonesGenerator.registerSuccessfulTone()
     }
 
     private fun playVibrator(durationInMillis: Int) {

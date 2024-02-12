@@ -101,6 +101,7 @@ class FaceDetectionFragment : Fragment() {
                         binding.faceFoundView.root.visibility = View.VISIBLE
                         binding.faceFoundView.txtFaceName.text = event.recognizedFace.name
                         binding.faceFoundView.ivSavedImage.setImageBitmap(event.recognizedFace.faceImage)
+                        binding.faceFoundView.ivPreviewImage.setImageBitmap(currentBox)
                         nfcHapticFeeds.playSound(300)
 
                     }

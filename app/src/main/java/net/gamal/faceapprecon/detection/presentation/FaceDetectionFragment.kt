@@ -26,7 +26,7 @@ import net.gamal.faceapprecon.databinding.ActivityFaceDetectionBinding
 import net.gamal.faceapprecon.detection.presentation.mvi.CameraXViewModel
 import net.gamal.faceapprecon.detection.presentation.mvi.FaceDetectionContract
 import net.gamal.faceapprecon.detection.presentation.mvi.FaceDetectionViewModel
-import net.gamal.faceapprecon.presentation.dialogs.SaveFaceDialog
+import net.gamal.faceapprecon.dialogs.SaveFaceDialog
 import net.gamal.faceapprecon.utilities.hapticFeeds.NFCHapticFeeds
 import net.gamal.faceapprecon.utilities.utils.ImageDetectorUtil
 import net.gamal.faceapprecon.utilities.utils.MediaUtils.flip
@@ -115,7 +115,7 @@ class FaceDetectionFragment : Fragment() {
     }
 
     private fun setupSaveFaceButtons() {
-        saveFaceDialog.setCancelable(false)
+        saveFaceDialog.isCancelable = false
         saveFaceDialog.setOnSaveFaceClicked { name, bitmap ->
             bitmap?.let {
                 faceDetectionViewModel.processIntent(

@@ -19,8 +19,8 @@ import net.gamal.faceapprecon.detection.domain.interactors.GetAllFacesUC
 import net.gamal.faceapprecon.detection.domain.interactors.GetFacesByIdUC
 import net.gamal.faceapprecon.detection.domain.interactors.InsertFaceUC
 import net.gamal.faceapprecon.detection.domain.models.EncodedFaceInformation
-import net.gamal.faceapprecon.utilities.ml.EncodedFaceModelExecutor
-import net.gamal.faceapprecon.utilities.ml.TFLiteModelExecutor
+import net.gamal.faceapprecon.utilities.ml.models.EncodedFaceModelExecutor
+import net.gamal.faceapprecon.utilities.ml.models.TFLiteModelExecutor
 import net.gamal.faceapprecon.utilities.utils.FaceRecognitionUtils
 import net.gamal.faceapprecon.utilities.utils.Resource
 import net.gamal.faceapprecon.utilities.viewModel.BaseViewModel

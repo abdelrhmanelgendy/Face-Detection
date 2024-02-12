@@ -14,8 +14,8 @@ import net.gamal.faceapprecon.detection.datasource.dao.EncodedFacesDAO
 import net.gamal.faceapprecon.detection.datasource.db.EncodedFacesDatabase
 import net.gamal.faceapprecon.detection.domain.repository.IEncodedFaceRepository
 import net.gamal.faceapprecon.detection.domain.repository.localDs.IEncodedFaceLocalDS
-import net.gamal.faceapprecon.utilities.ml.EncodedFaceModelExecutor
-import net.gamal.faceapprecon.utilities.ml.TFLiteModelExecutor
+import net.gamal.faceapprecon.utilities.ml.models.EncodedFaceModelExecutor
+import net.gamal.faceapprecon.utilities.ml.models.TFLiteModelExecutor
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)

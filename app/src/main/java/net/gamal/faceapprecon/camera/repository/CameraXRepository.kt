@@ -4,6 +4,7 @@ package net.gamal.faceapprecon.camera.repository
 import android.content.Context
 import android.util.Log
 import androidx.annotation.OptIn
+import androidx.camera.core.Camera
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ExperimentalGetImage
 import androidx.camera.core.ImageAnalysis
@@ -51,14 +52,21 @@ class CameraXRepository(private val context: Context) {
     fun bindCameraPreview(
         previewView: PreviewView,
         lifecycleOwner: LifecycleOwner,
+        onCameraSet: (Camera) -> Unit,
         onImageProxy: (ImageProxy) -> Unit
 
     ) {
         cameraPreview = Preview.Builder().setTargetRotation(previewView.display.rotation).build()
         cameraPreview.setSurfaceProvider(previewView.surfaceProvider)
         try {
-            cameraProvider.bindToLifecycle(lifecycleOwner, cameraSelector, cameraPreview)
-            bindInputAnalyser(lifecycleOwner, previewView,onImageProxy)
+            onCameraSet(
+                cameraProvider.bindToLifecycle(
+                    lifecycleOwner,
+                    cameraSelector,
+                    cameraPreview
+                )
+            )
+            bindInputAnalyser(lifecycleOwner, previewView, onCameraSet, onImageProxy)
         } catch (illegalStateException: IllegalStateException) {
             Log.e(TAG, illegalStateException.message ?: "IllegalStateException")
         } catch (illegalArgumentException: IllegalArgumentException) {
@@ -70,6 +78,7 @@ class CameraXRepository(private val context: Context) {
     private fun bindInputAnalyser(
         lifecycleOwner: LifecycleOwner,
         imaPreviewView: PreviewView,
+        onCameraSet: (Camera) -> Unit,
         onImageProxy: (ImageProxy) -> Unit
     ) {
         imageAnalysis =
@@ -82,7 +91,13 @@ class CameraXRepository(private val context: Context) {
         }
 
         try {
-            cameraProvider.bindToLifecycle(lifecycleOwner, cameraSelector, imageAnalysis)
+            onCameraSet(
+                cameraProvider.bindToLifecycle(
+                    lifecycleOwner,
+                    cameraSelector,
+                    imageAnalysis
+                )
+            )
         } catch (illegalStateException: IllegalStateException) {
             Log.e(TAG, illegalStateException.message ?: "IllegalStateException")
         } catch (illegalArgumentException: IllegalArgumentException) {
@@ -92,7 +107,9 @@ class CameraXRepository(private val context: Context) {
 
     @ExperimentalGetImage
     fun switchCamera(
-        previewView: PreviewView, lifecycleOwner: LifecycleOwner, onImageProxy: (ImageProxy) -> Unit
+        previewView: PreviewView, lifecycleOwner: LifecycleOwner,
+        onCameraSet: (Camera) -> Unit,
+        onImageProxy: (ImageProxy) -> Unit
     ) {
         unbindCamera()
         currentCamera = if (currentCamera == CameraSelector.LENS_FACING_FRONT) {
@@ -101,7 +118,7 @@ class CameraXRepository(private val context: Context) {
             CameraSelector.LENS_FACING_FRONT
         }
         cameraSelector = CameraSelector.Builder().requireLensFacing(currentCamera).build()
-        bindCameraPreview(previewView, lifecycleOwner,onImageProxy)
+        bindCameraPreview(previewView, lifecycleOwner, onCameraSet,onImageProxy)
     }
 
     fun unbindCamera() {

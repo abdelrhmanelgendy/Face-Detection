@@ -5,9 +5,11 @@ import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.ScaleGestureDetector
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.OptIn
+import androidx.camera.core.Camera
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ExperimentalGetImage
 import androidx.camera.core.ImageProxy
@@ -154,8 +156,44 @@ class FaceDetectionFragment : Fragment() {
 
     @ExperimentalGetImage
     private fun setupCamera() {
-        cameraXViewModel.setupCamera(this, binding.cameraPreview, ::onGetImageProxy)
+        cameraXViewModel.setupCamera(this, binding.cameraPreview,::onCameraSetup ,::onGetImageProxy)
     }
+
+    private fun onCameraSetup(camera: Camera) {
+        setupSliderZooming(camera)
+        val listener = object : ScaleGestureDetector.SimpleOnScaleGestureListener() {
+            override fun onScale(detector: ScaleGestureDetector): Boolean {
+                val scale = camera.cameraInfo.zoomState.value!!.zoomRatio * detector.scaleFactor
+                var roundValue =roundValue((camera.cameraInfo.zoomState.value!!.zoomRatio/7.98).toFloat())
+                println("onCameraSetup:: ${roundValue}")
+
+                if (roundValue > .99) {
+                    roundValue = 1.0
+                }
+                if (roundValue <= 0.13) {
+                    roundValue = 0.0
+                }
+                binding.faceSizeSlider.value = roundValue.toFloat()
+                camera.cameraControl.setZoomRatio(scale)
+                return true
+            }
+        }
+        val scaleGestureDetector = ScaleGestureDetector(requireContext(), listener)
+        binding.cameraPreview.setOnTouchListener { _, event ->
+            scaleGestureDetector.onTouchEvent(event)
+            return@setOnTouchListener true
+        }
+    }
+
+    private fun setupSliderZooming(camera: Camera) {
+        binding.faceSizeSlider.addOnChangeListener { _, value, fromUser ->
+            if (fromUser) {
+                val scale = value * 7.98
+                camera.cameraControl.setZoomRatio(scale.toFloat())
+            }
+        }
+    }
+
 
     private fun onGetImageProxy(imageProxy: ImageProxy) {
         faceDetectionViewModel.startDetection(
@@ -163,12 +201,15 @@ class FaceDetectionFragment : Fragment() {
         )
     }
 
+    private fun roundValue(number: Float): Double {
+        return String.format("%.2f", number).toDouble()
+    }
+
     @ExperimentalGetImage
     private fun setupCameraButtons() {
         binding.switchCamera.setOnClickListener {
             cameraXViewModel.switchCamera(
-                binding.cameraPreview, this, ::onGetImageProxy
-            )
+                binding.cameraPreview, this, ::onCameraSetup,::onGetImageProxy)
         }
     }
 

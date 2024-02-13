@@ -47,6 +47,7 @@ interface FaceDetectionContract {
     sealed class FaceDetectionEvent : ViewEvent {
         data class FetchedListOfFaces(val faces: List<EncodedFaceInformation>) :
             FaceDetectionEvent()
+        data object FaceNotFound : FaceDetectionEvent()
 
         data class FetchedFaceByID(val face: EncodedFaceInformation) : FaceDetectionEvent()
 

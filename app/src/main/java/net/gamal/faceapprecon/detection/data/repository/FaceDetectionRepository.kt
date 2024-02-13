@@ -12,7 +12,7 @@ import com.google.mlkit.vision.face.FaceDetectorOptions
 
 object FaceDetectionRepository {
     private var cameraSelector: CameraSelector
-    private var currentCamera = CameraSelector.LENS_FACING_FRONT
+    private var currentCamera = CameraSelector.LENS_FACING_BACK
 
     init {
         cameraSelector = CameraSelector.Builder().requireLensFacing(currentCamera).build()

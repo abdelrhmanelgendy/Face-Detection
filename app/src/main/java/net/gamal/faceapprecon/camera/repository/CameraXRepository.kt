@@ -23,7 +23,7 @@ class CameraXRepository(private val context: Context) {
     private var cameraSelector: CameraSelector
     private lateinit var cameraPreview: Preview
     private lateinit var imageAnalysis: ImageAnalysis
-    private var currentCamera = CameraSelector.LENS_FACING_FRONT
+    private var currentCamera = CameraSelector.LENS_FACING_BACK
 
     init {
         cameraSelector = CameraSelector.Builder().requireLensFacing(currentCamera).build()

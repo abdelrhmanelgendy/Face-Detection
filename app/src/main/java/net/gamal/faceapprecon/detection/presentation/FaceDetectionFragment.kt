@@ -105,6 +105,11 @@ class FaceDetectionFragment : Fragment() {
                         nfcHapticFeeds.playSound(300)
 
                     }
+
+                    FaceDetectionContract.FaceDetectionEvent.FaceNotFound -> {
+                        binding.faceInfo.root.visibility = View.VISIBLE
+                        binding.faceFoundView.root.visibility = View.INVISIBLE
+                    }
                 }
             }
 

@@ -184,8 +184,10 @@ class FaceDetectionViewModel @Inject constructor(
             encodeFace(lifecycle, context, bitmap) {
                 val nearestFaceResult =
                     FaceRecognitionUtils.findNearestFace(EncodedFaceInformation(it), allFaces)
-                nearestFaceResult?.let {
-                    loadImageByName(it)
+                if(nearestFaceResult == null) {
+                    sendEvent(FaceDetectionContract.FaceDetectionEvent.FaceNotFound)
+                }else{
+                    loadImageByName(nearestFaceResult)
                 }
             }
         }

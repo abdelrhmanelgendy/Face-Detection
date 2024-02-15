@@ -1,6 +1,7 @@
 package net.gamal.faceapprecon.detection.presentation.mvi
 
 import android.app.Application
+import androidx.camera.core.Camera
 import androidx.camera.core.ExperimentalGetImage
 import androidx.camera.core.ImageProxy
 import androidx.camera.view.PreviewView
@@ -17,26 +18,28 @@ class CameraXViewModel @Inject constructor(private val application: Application)
     fun setupCamera(
         lifecycleOwner: LifecycleOwner,
         cameraPreview: PreviewView,
+        onCameraSet:(Camera)->Unit,
         onImageProxy: (ImageProxy) -> Unit
     ) {
         cameraXRepository.initializeCamera().observe(lifecycleOwner) {
-            bindCameraPreview(cameraPreview, lifecycleOwner, onImageProxy)
+            bindCameraPreview(cameraPreview, lifecycleOwner,onCameraSet,onImageProxy)
         }
     }
 
     private fun bindCameraPreview(
         previewView: PreviewView,
         lifecycleOwner: LifecycleOwner,
+        onCameraSet:(Camera)->Unit,
         onImageProxy: (ImageProxy) -> Unit
     ) {
-        cameraXRepository.bindCameraPreview(previewView, lifecycleOwner, onImageProxy)
+        cameraXRepository.bindCameraPreview(previewView, lifecycleOwner,onCameraSet, onImageProxy)
     }
 
     @ExperimentalGetImage
     fun switchCamera(
-        previewView: PreviewView, lifecycleOwner: LifecycleOwner, onImageProxy: (ImageProxy) -> Unit
+        previewView: PreviewView, lifecycleOwner: LifecycleOwner,onCameraSet:(Camera)->Unit ,onImageProxy: (ImageProxy) -> Unit
     ) {
-        cameraXRepository.switchCamera(previewView, lifecycleOwner, onImageProxy)
+        cameraXRepository.switchCamera(previewView, lifecycleOwner,onCameraSet, onImageProxy)
     }
 
     fun getCurrentCamera(): Int {

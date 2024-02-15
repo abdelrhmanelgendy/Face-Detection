@@ -124,6 +124,8 @@ class FaceDetectionFragment : Fragment() {
 
     private fun setupSaveFaceButtons() {
         saveFaceDialog.isCancelable = false
+        binding.faceFoundView.root.visibility = View.INVISIBLE
+
         saveFaceDialog.setOnSaveFaceClicked { name, bitmap ->
             bitmap?.let {
                 faceDetectionViewModel.processIntent(
@@ -227,8 +229,10 @@ class FaceDetectionFragment : Fragment() {
                 binding.faceInfo.root.visibility = View.VISIBLE
                 binding.faceFoundView.root.visibility = View.INVISIBLE
             }
+            binding.saveFaceButton.visibility=View.INVISIBLE
             return
         }
+        binding.saveFaceButton.visibility=View.VISIBLE
 
         val biggestFace = ImageDetectorUtil.biggestFace(faces)!!
         bindFaceView(biggestFace)

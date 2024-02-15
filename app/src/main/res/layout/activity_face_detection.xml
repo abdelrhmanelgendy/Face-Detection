@@ -37,34 +37,38 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:visibility="invisible"
         />
-        <ImageView
-            android:id="@+id/save_face_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/baseline_save_24"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="400dp"
-            android:padding="10dp"
-            />
+
         <ImageView
             android:id="@+id/switchCamera"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/baseline_cameraswitch_24"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/save_face_button"
+            app:layout_constraintBottom_toTopOf="@id/save_face_button"
+            android:layout_marginBottom="5dp"
             android:padding="10dp"
             />
 
+    <ImageView
+        android:id="@+id/save_face_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/baseline_save_24"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/face_found_view"
+        android:layout_marginTop="400dp"
+        android:padding="10dp"
+        android:visibility="invisible"
+        />
     <com.google.android.material.slider.Slider
         android:id="@+id/faceSizeSlider"
         android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:rotation="270"
-        app:layout_constraintBottom_toTopOf="@id/save_face_button"
-        app:layout_constraintStart_toStartOf="@id/save_face_button"
-        app:layout_constraintEnd_toEndOf="@id/save_face_button"
+        app:layout_constraintBottom_toTopOf="@id/switchCamera"
+        app:layout_constraintStart_toStartOf="@id/switchCamera"
+        app:layout_constraintEnd_toEndOf="@id/switchCamera"
         android:layout_marginBottom="40dp"
         />
 
